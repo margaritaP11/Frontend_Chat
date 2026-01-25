@@ -1,3 +1,62 @@
+import { useContext, useState } from 'react'
+import { AuthContext } from '../context/AuthContext'
+import { Link, useNavigate } from 'react-router-dom'
+import './Login.css'
+import logo from '../assets/ichcram.svg'
+
 export default function Login() {
-  return <h1>Login</h1>
+  const { login, loading, error } = useContext(AuthContext)
+  const [identifier, setIdentifier] = useState('')
+  const [password, setPassword] = useState('')
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      await login({ identifier, password })
+      navigate('/')
+    } catch {
+      // ошибка уже в AuthContext
+    }
+  }
+
+  return (
+    <div className="auth-page center-only">
+      <div className="auth-card">
+        <div className="auth-box">
+          <img src={logo} className="auth-logo" />
+
+          <form onSubmit={handleSubmit} className="auth-form">
+            <input
+              type="text"
+              placeholder="Username or email"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
+            />
+
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            {error && <div className="auth-error">{error}</div>}
+
+            <button type="submit" disabled={loading}>
+              {loading ? 'Logging in...' : 'Log in'}
+            </button>
+          </form>
+
+          <Link to="/reset" className="auth-link">
+            Forgot password?
+          </Link>
+        </div>
+
+        <div className="auth-box secondary">
+          Don’t have an account? <Link to="/register">Sign up</Link>
+        </div>
+      </div>
+    </div>
+  )
 }
