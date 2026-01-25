@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import logo from '../assets/logo.svg'
+import logo from '../assets/ichcram.svg'
 import {
   FiHome,
   FiSearch,
@@ -49,7 +49,7 @@ export default function Sidebar() {
 
         <NavLink to="/profile/me" className="nav-item">
           <FiUser className="icon" />
-          Profile Home
+          Profile
         </NavLink>
       </nav>
     </div>

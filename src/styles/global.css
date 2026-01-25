@@ -1,0 +1,25 @@
+/* Глобальный box-sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Сброс отступов */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  font-family: sans-serif;
+  background: #fafafa;
+}
+
+/* Контейнер всего приложения */
+#root {
+  max-width: 1440px;
+  margin: 0 auto; /* центрируем */
+  min-height: 100vh;
+  display: flex;
+}
