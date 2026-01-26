@@ -13,7 +13,7 @@ body {
   width: 100%;
   min-height: 100%;
   font-family: sans-serif;
-  background: #fafafa;
+  background: white;
 }
 
 /* Контейнер всего приложения */
@@ -21,5 +21,5 @@ body {
   max-width: 1440px;
   margin: 0 auto; /* центрируем */
   min-height: 100vh;
-  display: flex;
+  /*  display: flex; */
 }

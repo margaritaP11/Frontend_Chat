@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
-import './Login.css'
+import './Register.css'
 import logo from '../assets/ichcram.svg'
 
 export default function Register() {
@@ -23,82 +23,87 @@ export default function Register() {
     }
   }
 
-  // --- Ошибки по полям ---
   const emailError = error && error.toLowerCase().includes('email')
-
   const usernameError = error && error.toLowerCase().includes('username')
-
   const passwordError = error && error.toLowerCase().includes('password')
 
   return (
-    <div className="auth-page center-only">
-      <div className="auth-card">
-        <div className="auth-box">
-          <img src={logo} className="auth-logo" />
+    <div className="register-page">
+      <div className="register-box">
+        <img src={logo} className="register-logo" />
 
-          <p className="auth-subtitle">
-            Sign up to see photos and videos from your friends.
-          </p>
+        <p className="register-subtitle">
+          Sign up to see photos and videos from your friends.
+        </p>
 
-          <form onSubmit={handleSubmit} className="auth-form">
-            {/* EMAIL */}
-            <div className="field-with-error">
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              {emailError && (
-                <div className="field-error">This email is already used.</div>
-              )}
-            </div>
+        <form onSubmit={handleSubmit} className="register-form">
+          <div className="field-with-error">
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            {emailError && (
+              <div className="field-error">This email is already used.</div>
+            )}
+          </div>
 
-            {/* FULL NAME */}
+          <input
+            type="text"
+            placeholder="Full Name"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+          />
+
+          <div className="field-with-error">
             <input
               type="text"
-              placeholder="Full Name"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
+            {usernameError && (
+              <div className="field-error">This username is already taken.</div>
+            )}
+          </div>
 
-            {/* USERNAME */}
-            <div className="field-with-error">
-              <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              {usernameError && (
-                <div className="field-error">
-                  This username is already taken.
-                </div>
-              )}
-            </div>
+          <div className="field-with-error">
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {passwordError && (
+              <div className="field-error">Password is too weak.</div>
+            )}
+          </div>
 
-            {/* PASSWORD */}
-            <div className="field-with-error">
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              {passwordError && (
-                <div className="field-error">Password is too weak.</div>
-              )}
-            </div>
+          <p className="register-note">
+            People who use our service may have uploaded your contact
+            information to Instagram.{' '}
+            <span className="link-like">Learn More</span>
+          </p>
 
-            <button type="submit" disabled={loading}>
-              {loading ? 'Signing up...' : 'Sign up'}
-            </button>
-          </form>
-        </div>
+          <p className="register-note small">
+            By signing up, you agree to our{' '}
+            <span className="link-like">Terms</span>,{' '}
+            <span className="link-like">Privacy Policy</span> and{' '}
+            <span className="link-like">Cookies Policy</span>.
+          </p>
 
-        <div className="auth-box secondary">
-          Have an account? <Link to="/login">Log in</Link>
-        </div>
+          <button type="submit" disabled={loading}>
+            {loading ? 'Signing up...' : 'Sign up'}
+          </button>
+        </form>
+      </div>
+
+      <div className="register-secondary">
+        Have an account?{' '}
+        <Link to="/login" className="register-link">
+          Log in
+        </Link>
       </div>
     </div>
   )

@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import './Login.css'
+import './ResetPassword.css'
 import logo from '../assets/ichcram.svg'
+import lockIcon from '../assets/Schlussel.svg' // добавь иконку замка
+import { api } from '../api/client.js'
 
 export default function ResetPassword() {
   const [identifier, setIdentifier] = useState('')
@@ -17,36 +19,46 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="auth-page center-only">
-      <div className="auth-card">
-        <div className="auth-box">
-          <img src={logo} className="auth-logo" />
+    <div className="reset-page">
+      {/* Верхняя полоса */}
+      <div className="reset-header">
+        <img src={logo} className="reset-logo" />
+      </div>
 
-          <h3 className="auth-title">Trouble logging in?</h3>
+      {/* Центральная карточка */}
+      <div className="reset-box">
+        <img src={lockIcon} className="reset-icon" />
 
-          <p className="auth-text">
-            Enter your email or username and we’ll send you a link to get back
-            into your account.
-          </p>
+        <h3 className="reset-title">Trouble logging in?</h3>
 
-          <form onSubmit={handleSubmit} className="auth-form">
-            <input
-              type="text"
-              placeholder="Email or Username"
-              value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
-            />
+        <p className="reset-text">
+          Enter your email, phone, or username and we’ll send you a link to get
+          back into your account.
+        </p>
 
-            <button type="submit">Reset your password</button>
-          </form>
+        <form onSubmit={handleSubmit} className="reset-form">
+          <input
+            type="text"
+            placeholder="Email or Username"
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
+          />
 
-          <div className="auth-divider">OR</div>
+          <button type="submit">Reset your password</button>
+        </form>
 
-          <Link to="/register" className="auth-link">
-            Create new account
-          </Link>
+        <div className="reset-divider">
+          <div className="line"></div>
+          <div className="or">OR</div>
+          <div className="line"></div>
+        </div>
 
-          <Link to="/login" className="auth-back">
+        <Link to="/register" className="reset-link">
+          Create new account
+        </Link>
+
+        <div className="reset-back-container">
+          <Link to="/login" className="reset-back-text">
             Back to login
           </Link>
         </div>
