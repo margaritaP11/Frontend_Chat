@@ -1,8 +1,9 @@
 import { useContext, useState } from 'react'
-import { AuthContext } from '../context/AuthContext'
+import { AuthContext } from '../../context/AuthContext'
+
 import { Link, useNavigate } from 'react-router-dom'
 import './Register.css'
-import logo from '../assets/ichcram.svg'
+import logo from '../../assets/ichcram.svg'
 
 export default function Register() {
   const { register: signup, loading, error } = useContext(AuthContext)
@@ -17,7 +18,7 @@ export default function Register() {
     e.preventDefault()
     try {
       await signup({ email, fullName, username, password })
-      navigate('/')
+      navigate('/edit')
     } catch {
       // ошибка уже обработана в AuthContext
     }

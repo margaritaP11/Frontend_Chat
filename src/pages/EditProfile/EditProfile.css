@@ -1,0 +1,139 @@
+.edit-page {
+  display: flex;
+  max-width: 935px;
+  margin: 40px auto;
+  gap: 30px;
+}
+
+.edit-box {
+  flex: 1;
+  background: #fff;
+  padding: 32px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.edit-title {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+/* Верхний блок */
+.edit-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  border: 1px solid #dbdbdb;
+  border-radius: 10px;
+  background-color: #efefef;
+  padding: 12px 20px;
+  width: 100%;
+  max-width: 610px;
+}
+
+.edit-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.edit-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.edit-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  word-break: break-word;
+}
+
+.edit-username {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.edit-subtitle {
+  font-size: 14px;
+  color: #8e8e8e;
+}
+
+.edit-subtitle::before {
+  content: '• ';
+  color: #8e8e8e;
+}
+
+.edit-photo-button {
+  align-self: flex-start;
+  padding: 6px 12px;
+  border: 1px solid #dbdbdb;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 7px;
+  background-color: #0095f6;
+  margin-top: 18px;
+}
+
+/* Форма */
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  width: 610px;
+}
+
+.edit-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  gap: 6px;
+}
+
+.edit-form input,
+.edit-form textarea {
+  padding: 10px;
+  border: 1px solid #dbdbdb;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fafafa;
+  height: 42px;
+  background-color: white;
+}
+
+.edit-form textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.4;
+}
+
+.char-count {
+  font-size: 12px;
+  color: #8e8e8e;
+  text-align: right;
+  margin-top: 4px;
+}
+
+.edit-save {
+  padding: 10px 0;
+  background: #0095f6;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  width: 268px;
+  height: 32px;
+}
+
+.edit-save:hover {
+  background: #0077cc;
+}

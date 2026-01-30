@@ -1,20 +1,29 @@
 import { Routes, Route } from 'react-router-dom'
 
+// Main pages
 import Feed from '../pages/Feed'
 import Search from '../pages/Search'
 import Explore from '../pages/Explore'
 import Chat from '../pages/Chat'
 import Notifications from '../pages/Notifications'
-import Create from '../pages/Create'
-import Profile from '../pages/Profile'
 
-import Login from '../pages/Login'
-import Register from '../pages/Register'
-import ResetPassword from '../pages/ResetPassword'
+// Create Post (страница-оверлей)
+import CreatePostPage from '../pages/CreatePost/CreatePostPage'
 
-export default function AppRoutes() {
+// Profile pages
+import ProfileRouter from '../pages/Profile/ProfileRouter'
+import UserProfile from '../pages/Profile/UserProfile'
+import CreateProfile from '../pages/Profile/CreateProfile'
+import EditProfile from '../pages/EditProfile/EditProfile'
+
+// Auth
+import Login from '../pages/Registration/Login'
+import Register from '../pages/Registration/Register'
+import ResetPassword from '../pages/Registration/ResetPassword'
+
+export default function AppRoutes({ location }) {
   return (
-    <Routes>
+    <Routes location={location}>
       {/* Auth */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
@@ -26,8 +35,15 @@ export default function AppRoutes() {
       <Route path="/explore" element={<Explore />} />
       <Route path="/chat" element={<Chat />} />
       <Route path="/notifications" element={<Notifications />} />
-      <Route path="/create" element={<Create />} />
-      <Route path="/profile/:id" element={<Profile />} />
+
+      {/* Create Post — отдельная страница, но выглядит как модалка */}
+      <Route path="/create" element={<CreatePostPage />} />
+
+      {/* Profile logic */}
+      <Route path="/profile" element={<ProfileRouter />} />
+      <Route path="/profile/view" element={<UserProfile />} />
+      <Route path="/profile/create" element={<CreateProfile />} />
+      <Route path="/profile/edit" element={<EditProfile />} />
     </Routes>
   )
 }

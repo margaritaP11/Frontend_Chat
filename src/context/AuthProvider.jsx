@@ -1,55 +1,97 @@
-import { useState } from "react"
-import { AuthContext } from "./AuthContext"
-import { api } from "../api/client"
+import { useState, useEffect } from 'react'
+import { AuthContext } from './AuthContext'
 
-export function AuthProvider({ children }) {
+export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      console.warn('Нет токена в localStorage')
+      setLoading(false)
+      return
+    }
+
+    fetch('http://localhost:8080/api/profile/me', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Ошибка авторизации')
+        }
+        return res.json()
+      })
+      .then((data) => {
+        console.log('PROFILE LOADED:', data)
+        setUser(data.profile || data)
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.error('Ошибка загрузки профиля:', err.message)
+        setUser(null)
+        setLoading(false)
+      })
+  }, [])
+
+  // 🔥 ЛОГИН
   const login = async ({ identifier, password }) => {
     setLoading(true)
     setError(null)
-    try {
-      const res = await api.post("/auth/login", { identifier, password })
-      setUser(res.data.user)
-      return res.data
-    } catch (err) {
-      setError(err.response?.data?.message || "Login failed")
-      throw err
-    } finally {
+
+    const res = await fetch('http://localhost:8080/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ identifier, password }),
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      setError(data.message)
       setLoading(false)
+      throw new Error(data.message)
     }
+
+    localStorage.setItem('token', data.token || data.accessToken)
+    setUser(data.user)
+    setLoading(false)
   }
 
-  const register = async ({ email, fullName, username, password }) => {
+  // 🔥 РЕГИСТРАЦИЯ — ВОТ ЭТО ТЫ ДОЛЖНА ДОБАВИТЬ
+  const register = async ({ username, fullName, email, password }) => {
     setLoading(true)
     setError(null)
-    try {
-      const res = await api.post("/auth/register", {
-        email,
-        fullName,
-        username,
-        password,
-      })
-      setUser(res.data.user)
-      return res.data
-    } catch (err) {
-      setError(err.response?.data?.message || "Registration failed")
-      throw err
-    } finally {
+
+    const res = await fetch('http://localhost:8080/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, fullName, email, password }),
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      setError(data.message)
       setLoading(false)
+      throw new Error(data.message)
     }
+
+    localStorage.setItem('token', data.token || data.accessToken)
+    setUser(data.user)
+    setLoading(false)
   }
 
-  const value = {
-    user,
-    setUser,
-    loading,
-    error,
-    login,
-    register,
-  }
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider
+      value={{ user, setUser, loading, error, login, register }}
+    >
+      {children}
+    </AuthContext.Provider>
+  )
 }

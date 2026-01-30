@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './ResetPassword.css'
-import logo from '../assets/ichcram.svg'
-import lockIcon from '../assets/Schlussel.svg' // добавь иконку замка
-import { api } from '../api/client.js'
+import logo from '../../assets/ichcram.svg'
+import lockIcon from '../../assets/Schlussel.svg' // добавь иконку замка
+import { api } from '../../api/client.js'
 
 export default function ResetPassword() {
   const [identifier, setIdentifier] = useState('')

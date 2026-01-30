@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import logo from '../assets/ichcram.svg'
 import {
   FiHome,
@@ -12,45 +12,66 @@ import {
 import './Sidebar.css'
 
 export default function Sidebar() {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const pathname = location.pathname
+  const search = location.search
+
+  // ЛОГИКА АКТИВНОСТИ
+  const isCreateActive =
+    pathname === '/profile' && search.includes('create=true')
+
+  const isProfileActive =
+    pathname === '/profile' && !search.includes('create=true')
+
   return (
     <div className="sidebar">
       <img src={logo} alt="ICKGRAM" className="logo_img" />
 
       <nav className="nav">
-        <NavLink to="/" className="nav-item">
+        <div className="nav-item" onClick={() => navigate('/')}>
           <FiHome className="icon" />
           Home
-        </NavLink>
+        </div>
 
-        <NavLink to="/search" className="nav-item">
+        <div className="nav-item" onClick={() => navigate('/search')}>
           <FiSearch className="icon" />
           Search
-        </NavLink>
+        </div>
 
-        <NavLink to="/explore" className="nav-item">
+        <div className="nav-item" onClick={() => navigate('/explore')}>
           <FiCompass className="icon" />
           Explore
-        </NavLink>
+        </div>
 
-        <NavLink to="/chat" className="nav-item">
+        <div className="nav-item" onClick={() => navigate('/chat')}>
           <FiMessageCircle className="icon" />
           Messages
-        </NavLink>
+        </div>
 
-        <NavLink to="/notifications" className="nav-item">
+        <div className="nav-item" onClick={() => navigate('/notifications')}>
           <FiBell className="icon" />
           Notifications
-        </NavLink>
+        </div>
 
-        <NavLink to="/create" className="nav-item">
+        {/* CREATE */}
+        <div
+          className={`nav-item ${isCreateActive ? 'active' : ''}`}
+          onClick={() => navigate('/profile?create=true')}
+        >
           <FiPlusSquare className="icon" />
           Create
-        </NavLink>
+        </div>
 
-        <NavLink to="/profile/me" className="nav-item">
+        {/* PROFILE */}
+        <div
+          className={`nav-item ${isProfileActive ? 'active' : ''}`}
+          onClick={() => navigate('/profile')}
+        >
           <FiUser className="icon" />
           Profile
-        </NavLink>
+        </div>
       </nav>
     </div>
   )

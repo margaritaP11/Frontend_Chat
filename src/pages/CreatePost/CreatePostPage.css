@@ -1,0 +1,157 @@
+.create-overlay {
+  position: fixed;
+  top: 0;
+  left: 240px;
+  width: calc(100% - 240px);
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.create-wrapper {
+  background: #fff;
+  width: 900px;
+  height: 600px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.create-header {
+  height: 50px;
+  border-bottom: 1px solid #dbdbdb;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.share-button {
+  background: #0095f6;
+  color: #fff;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.share-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.create-body {
+  display: flex;
+  flex: 1;
+}
+
+.create-left {
+  flex: 1;
+  background: #fafafa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.upload-box {
+  text-align: center;
+  cursor: pointer;
+}
+
+.upload-svg {
+  width: 170px;
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+.emoji-icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.preview-image {
+  width: 570px;
+  height: 521px;
+  object-fit: contain;
+}
+
+.create-right {
+  width: 300px;
+  padding: 20px;
+  border-left: 1px solid #dbdbdb;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar-img {
+  width: 32px;
+  height: 32px;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #dbdbdb;
+  background-color: #f0f0f0;
+  flex-shrink: 0;
+  display: block;
+}
+
+.username {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.caption-input {
+  border: none;
+  outline: none;
+  resize: none;
+  min-height: 150px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.caption-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #999;
+  font-size: 12px;
+}
+
+.emoji {
+  font-size: 20px;
+  background: #737373;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: #737373;
+
+  margin-top: 10px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 столбца */
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.grid-item {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* квадрат */
+  object-fit: cover;
+  border-radius: 8px;
+}
