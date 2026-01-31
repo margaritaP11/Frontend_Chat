@@ -481,3 +481,56 @@
   gap: 12px;
   margin-left: 6px;
 }
+.comment-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comment-author {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.comment-text {
+  font-size: 14px;
+  flex: 1;
+}
+
+.comment-like {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.comment-like.liked {
+  color: #ed4956;
+}
+
+.comment-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #999;
+}
+
+.comment-delete:hover {
+  color: #e60000;
+}
+
+.comment-meta {
+  font-size: 11px;
+  color: #8e8e8e;
+  display: flex;
+  gap: 12px;
+  margin-left: 40px;
+}

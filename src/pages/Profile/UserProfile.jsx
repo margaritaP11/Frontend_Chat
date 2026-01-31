@@ -47,22 +47,39 @@ export default function UserProfile() {
     }
   }, [user])
 
-  const openPostModal = (post) => {
+  const openPostModal = async (post) => {
     setSelectedPost(post)
 
-    setIsLiked(false)
+    // ❤️ ставим лайк из поста, если мы его уже сохраняли
+    setIsLiked(!!post.liked)
     setLikesCount(Number.isFinite(post.likesCount) ? post.likesCount : 0)
 
-    setComments(
-      (post.comments || []).map((c) => ({
-        id: c.id ?? c._id ?? Math.random().toString(36).slice(2),
-        author: c.author ?? 'user',
-        text: c.text ?? '',
-        likes: Number.isFinite(c.likes) ? c.likes : 0,
-        liked: false,
-        createdAt: c.createdAt ?? new Date().toISOString(),
-      })),
-    )
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/comments/${post._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
+      )
+      const data = await res.json()
+
+      setComments(
+        data.map((c) => ({
+          id: c._id,
+          author: c.user?.name || 'user',
+          text: c.text,
+          avatar: c.user?.avatar || user.avatar || 'https://placehold.co/32',
+          likes: Array.isArray(c.likes) ? c.likes.length : 0,
+          liked: Array.isArray(c.likes) ? c.likes.includes(user._id) : false,
+          createdAt: c.createdAt,
+        })),
+      )
+    } catch (err) {
+      console.error('FETCH COMMENTS ERROR:', err)
+      setComments([])
+    }
 
     setNewComment('')
   }
@@ -75,49 +92,108 @@ export default function UserProfile() {
     setNewComment('')
   }
 
-  const handleLikeToggle = () => {
-    setIsLiked((prevLiked) => {
-      setLikesCount((prevCount) => {
-        const safePrev = Number.isFinite(prevCount) ? prevCount : 0
-        return prevLiked ? safePrev - 1 : safePrev + 1
-      })
-      return !prevLiked
-    })
-  }
+  const handleLikeToggle = async () => {
+    if (!selectedPost) return
 
-  const handleCommentLike = (id) => {
-    setComments((prev) =>
-      prev.map((c) =>
-        c.id === id
-          ? {
-              ...c,
-              liked: !c.liked,
-              likes: c.liked ? c.likes - 1 : c.likes + 1,
-            }
-          : c,
-      ),
-    )
-  }
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/likes/${selectedPost._id}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
+      )
 
-  const deleteComment = (id) => {
-    setComments((prev) => prev.filter((c) => c.id !== id))
-  }
+      const data = await res.json()
 
-  const handleAddComment = () => {
-    const text = newComment.trim()
-    if (!text) return
+      setIsLiked(data.liked)
+      setLikesCount(data.likesCount)
 
-    const newItem = {
-      id: Date.now(),
-      author: user.username,
-      text,
-      liked: false,
-      likes: 0,
-      createdAt: new Date().toISOString(),
+      // 🔥 запоминаем, что этот пост лайкнут текущим юзером
+      setPosts((prev) =>
+        prev.map((p) =>
+          p._id === selectedPost._id
+            ? { ...p, liked: data.liked, likesCount: data.likesCount }
+            : p,
+        ),
+      )
+    } catch (err) {
+      console.error('POST LIKE ERROR:', err)
     }
+  }
 
-    setComments((prev) => [...prev, newItem])
-    setNewComment('')
+  const handleCommentLike = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:8080/api/comments/like/${id}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+
+      const data = await res.json()
+
+      setComments((prev) =>
+        prev.map((c) =>
+          c.id === id ? { ...c, liked: data.liked, likes: data.likes } : c,
+        ),
+      )
+    } catch (err) {
+      console.error('COMMENT LIKE ERROR:', err)
+    }
+  }
+
+  const deleteComment = async (id) => {
+    try {
+      await fetch(`http://localhost:8080/api/comments/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+
+      setComments((prev) => prev.filter((c) => c.id !== id))
+    } catch (err) {
+      console.error('DELETE COMMENT ERROR:', err)
+    }
+  }
+
+  const handleAddComment = async () => {
+    const text = newComment.trim()
+    if (!text || !selectedPost) return
+
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/comments/${selectedPost._id}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+          body: JSON.stringify({ text }),
+        },
+      )
+
+      const c = await res.json()
+
+      const newItem = {
+        id: c._id,
+        author: c.user?.name || user.username,
+        text: c.text,
+        avatar: c.user?.avatar || user.avatar || 'https://placehold.co/32',
+        liked: false,
+        likes: Array.isArray(c.likes) ? c.likes.length : 0,
+        createdAt: c.createdAt,
+      }
+
+      setComments((prev) => [...prev, newItem])
+      setNewComment('')
+    } catch (err) {
+      console.error('ADD COMMENT ERROR:', err)
+    }
   }
 
   const handleKeyDown = (e) => {
@@ -269,6 +345,8 @@ export default function UserProfile() {
                 {comments.map((c) => (
                   <div key={c.id} className="comment-block">
                     <div className="comment-row">
+                      <img src={c.avatar} className="comment-avatar" />
+
                       <span className="comment-author">{c.author}</span>
                       <span className="comment-text">{c.text}</span>
 
