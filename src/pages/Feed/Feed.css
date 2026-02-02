@@ -1,0 +1,133 @@
+.feed-container {
+  display: grid;
+  grid-template-columns: repeat(2, 404px);
+  justify-content: center;
+  gap: 20px;
+  padding-top: 20px;
+}
+
+/* POST */
+.feed-post {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #dbdbdb;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* HEADER */
+.feed-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+}
+
+.feed-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.feed-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+}
+
+.feed-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.feed-username {
+  font-weight: 600;
+}
+
+.feed-date {
+  font-size: 12px;
+  color: #777;
+}
+
+.follow-btn {
+  background-color: white;
+  border: none;
+  color: #0095f6;
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.follow-btn:hover {
+  color: #b80d41;
+}
+
+/* IMAGE */
+.feed-image {
+  width: 100%;
+  height: auto;
+}
+
+/* ACTIONS */
+.feed-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+}
+
+.like-icon,
+.comment-icon {
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.like-icon:hover,
+.comment-icon:hover {
+  transform: scale(1.1);
+}
+
+.likes-count {
+  font-weight: 600;
+}
+.like-emoji {
+  font-size: 23px; /* ← збільшення розміру емоджі */
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+/* CAPTION */
+.feed-caption {
+  padding: 0 12px 12px;
+  display: flex;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.more-btn {
+  color: #777;
+  cursor: pointer;
+  margin-left: 4px;
+  font-weight: 500;
+}
+.more-btn:hover {
+  color: #000;
+}
+.all-comments {
+  padding: 0 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* END */
+.feed-end {
+  text-align: center;
+  color: #777;
+  margin-top: 20px;
+  padding-bottom: 40px;
+}
