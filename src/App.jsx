@@ -12,6 +12,7 @@ export default function App() {
     location.pathname === '/register' ||
     location.pathname === '/reset'
 
+  // Если это страница авторизации — не показываем Sidebar
   if (isAuthPage) {
     return <AppRoutes location={location} />
   }
@@ -21,10 +22,10 @@ export default function App() {
       <Sidebar />
 
       <div style={{ marginLeft: '240px', width: '100%', padding: '0 20px' }}>
-        {/* Рендерим фон */}
+        {/* Основные маршруты */}
         <AppRoutes location={background || location} />
 
-        {/* Рендерим модалку поверх */}
+        {/* Модалка создания поста */}
         {location.pathname === '/create' && <CreatePostPage />}
       </div>
     </div>

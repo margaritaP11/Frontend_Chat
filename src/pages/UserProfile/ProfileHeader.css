@@ -1,0 +1,101 @@
+.profile-header {
+  display: flex;
+  gap: 100px;
+  align-items: flex-start;
+}
+
+.profile-avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.profile-top {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+
+.profile-username {
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.profile-edit-button {
+  padding: 8px 34px;
+  background: #efefef;
+  border: 1px solid #efefef;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.profile-edit-button:hover {
+  background: #e3e3e3;
+}
+
+.profile-stats {
+  display: flex;
+  gap: 40px;
+  margin-top: 10px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
+.stat-count {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #888;
+}
+
+.profile-fullname {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.profile-bio {
+  font-size: 14px;
+  color: #444;
+  max-width: 400px;
+  white-space: normal;
+  line-height: 1.4;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.bio-more {
+  color: #8e8e8e;
+  cursor: pointer;
+  margin-left: 4px;
+}
+
+.bio-more:hover {
+  color: #737373;
+}
+
+.profile-website {
+  font-size: 14px;
+  color: #00376b;
+  text-decoration: none;
+}
+
+.profile-website:hover {
+  text-decoration: underline;
+}

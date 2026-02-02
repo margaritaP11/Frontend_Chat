@@ -1,0 +1,18 @@
+.profile-page {
+  display: flex;
+  max-width: 935px;
+  margin: 40px auto;
+  gap: 30px;
+}
+
+.profile-box {
+  flex: 1;
+  background: #fff;
+  padding: 0 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-grid {
+  margin-top: 40px;
+}

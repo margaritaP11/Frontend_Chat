@@ -2,17 +2,16 @@ import { Routes, Route } from 'react-router-dom'
 
 // Main pages
 import Feed from '../pages/Feed'
-import Search from '../pages/Search'
+import Search from '../pages/Search/SearchPage' // ← ПРАВИЛЬНО
 import Explore from '../pages/Explore'
 import Chat from '../pages/Chat'
 import Notifications from '../pages/Notifications'
 
-// Create Post (страница-оверлей)
+// Create Post
 import CreatePostPage from '../pages/CreatePost/CreatePostPage'
 
 // Profile pages
-import ProfileRouter from '../pages/Profile/ProfileRouter'
-import UserProfile from '../pages/Profile/UserProfile'
+import UserProfile from '../pages/UserProfile/UserProfile'
 import CreateProfile from '../pages/Profile/CreateProfile'
 import EditProfile from '../pages/EditProfile/EditProfile'
 
@@ -29,19 +28,18 @@ export default function AppRoutes({ location }) {
       <Route path="/register" element={<Register />} />
       <Route path="/reset" element={<ResetPassword />} />
 
-      {/* Main app */}
+      {/* Main */}
       <Route path="/" element={<Feed />} />
       <Route path="/search" element={<Search />} />
       <Route path="/explore" element={<Explore />} />
       <Route path="/chat" element={<Chat />} />
       <Route path="/notifications" element={<Notifications />} />
 
-      {/* Create Post — отдельная страница, но выглядит как модалка */}
+      {/* Create Post */}
       <Route path="/create" element={<CreatePostPage />} />
 
-      {/* Profile logic */}
-      <Route path="/profile" element={<ProfileRouter />} />
-      <Route path="/profile/view" element={<UserProfile />} />
+      {/* Profile */}
+      <Route path="/profile/:id" element={<UserProfile />} />
       <Route path="/profile/create" element={<CreateProfile />} />
       <Route path="/profile/edit" element={<EditProfile />} />
     </Routes>

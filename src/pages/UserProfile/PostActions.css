@@ -1,0 +1,145 @@
+.comments-list {
+  flex: 1;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+}
+
+.comment-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.actions-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.like-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.heart-icon {
+  width: 26px;
+  height: 26px;
+  transition: 0.2s ease;
+}
+
+.heart-icon.liked {
+  fill: #ed4956;
+  stroke: none;
+  transform: scale(1.1);
+}
+
+.likes-count {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.time-ago {
+  font-size: 12px;
+  color: #8e8e8e;
+}
+
+.comment-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comment-author {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.comment-text {
+  font-size: 14px;
+  flex: 1;
+}
+
+.comment-like {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.comment-like.liked {
+  color: #ed4956;
+}
+
+.comment-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #999;
+}
+
+.comment-delete:hover {
+  color: #e60000;
+}
+
+.comment-meta {
+  font-size: 11px;
+  color: #8e8e8e;
+  display: flex;
+  gap: 12px;
+  margin-left: 40px;
+}
+.comment-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+  border-top: 1px solid #efefef;
+}
+
+.comment-form .emoji {
+  font-size: 22px;
+  cursor: pointer;
+}
+.emoji {
+  font-size: 20px;
+  opacity: 0.35;
+  color: #8e8e8e;
+  margin-right: 6px;
+  transform: translateY(1px);
+}
+
+.comment-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  padding: 6px 0;
+}
+
+.send-button {
+  background: none;
+  border: none;
+  color: #0095f6;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.send-button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}

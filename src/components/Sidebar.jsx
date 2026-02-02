@@ -1,4 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useContext } from 'react'
+import { AuthContext } from '../context/AuthContext'
+
 import logo from '../assets/ichcram.svg'
 import {
   FiHome,
@@ -14,16 +17,16 @@ import './Sidebar.css'
 export default function Sidebar() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { user } = useContext(AuthContext)
 
   const pathname = location.pathname
   const search = location.search
 
-  // ЛОГИКА АКТИВНОСТИ
   const isCreateActive =
-    pathname === '/profile' && search.includes('create=true')
+    pathname === `/profile/${user?._id}` && search.includes('create=true')
 
   const isProfileActive =
-    pathname === '/profile' && !search.includes('create=true')
+    pathname === `/profile/${user?._id}` && !search.includes('create=true')
 
   return (
     <div className="sidebar">
@@ -58,7 +61,7 @@ export default function Sidebar() {
         {/* CREATE */}
         <div
           className={`nav-item ${isCreateActive ? 'active' : ''}`}
-          onClick={() => navigate('/profile?create=true')}
+          onClick={() => navigate(`/profile/${user._id}?create=true`)}
         >
           <FiPlusSquare className="icon" />
           Create
@@ -67,7 +70,7 @@ export default function Sidebar() {
         {/* PROFILE */}
         <div
           className={`nav-item ${isProfileActive ? 'active' : ''}`}
-          onClick={() => navigate('/profile')}
+          onClick={() => navigate(`/profile/${user._id}`)}
         >
           <FiUser className="icon" />
           Profile

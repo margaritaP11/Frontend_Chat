@@ -1,16 +1,20 @@
 import { useContext } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import { Navigate } from 'react-router-dom'
-import UserProfile from './UserProfile'
+
+// ❗ ПРАВИЛЬНИЙ ШЛЯХ
+import UserProfile from '../UserProfile/UserProfile'
 
 export default function ProfileRouter() {
   const { user } = useContext(AuthContext)
 
-  // Если профиля нет → отправляем на создание/редактирование
-  if (!user || !user.username) {
+  if (user === null) {
+    return null
+  }
+
+  if (!user.username) {
     return <Navigate to="/profile/edit" />
   }
 
-  // Если профиль есть → показываем его
   return <UserProfile />
 }
