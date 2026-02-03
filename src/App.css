@@ -1,0 +1,10 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 240px; /* ← Sidebar НЕ затемнюється */
+  width: calc(100vw - 240px);
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+  z-index: 10;
+}

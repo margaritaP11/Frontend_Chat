@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react'
 import './Search.css'
 
-export default function SearchPage({ onOpenUser }) {
+export default function SearchPanel({ onClose }) {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState([])
 
   useEffect(() => {
+    if (!query.trim()) {
+      setResults([])
+      return
+    }
+
     const fetchUsers = async () => {
       try {
         const res = await fetch(
@@ -27,25 +32,22 @@ export default function SearchPage({ onOpenUser }) {
   }, [query])
 
   return (
-    <div className="search-page">
+    <div className="search-panel">
+      <h2 className="search-title">Search</h2>
+
       <input
         type="text"
         className="search-input"
-        placeholder="Search users..."
+        placeholder="Search"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
 
       <div className="search-results">
         {results.map((u) => (
-          <div
-            key={u._id}
-            className="search-user"
-            onClick={() => onOpenUser(u._id)}
-          >
+          <div key={u._id} className="search-user">
             <img
               src={u.avatar || 'https://placehold.co/40'}
-              alt=""
               className="search-avatar"
             />
             <div>
@@ -54,6 +56,10 @@ export default function SearchPage({ onOpenUser }) {
             </div>
           </div>
         ))}
+
+        {query && results.length === 0 && (
+          <div className="no-results">No users found</div>
+        )}
       </div>
     </div>
   )

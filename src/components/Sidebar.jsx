@@ -14,7 +14,7 @@ import {
 } from 'react-icons/fi'
 import './Sidebar.css'
 
-export default function Sidebar() {
+export default function Sidebar({ onOpenSearch }) {
   const navigate = useNavigate()
   const location = useLocation()
   const { user } = useContext(AuthContext)
@@ -38,7 +38,8 @@ export default function Sidebar() {
           Home
         </div>
 
-        <div className="nav-item" onClick={() => navigate('/search')}>
+        {/* 🔥 ВАЖЛИВО: відкриваємо SearchPanel */}
+        <div className="nav-item" onClick={onOpenSearch}>
           <FiSearch className="icon" />
           Search
         </div>
@@ -58,7 +59,6 @@ export default function Sidebar() {
           Notifications
         </div>
 
-        {/* CREATE */}
         <div
           className={`nav-item ${isCreateActive ? 'active' : ''}`}
           onClick={() => navigate(`/profile/${user._id}?create=true`)}
@@ -67,7 +67,6 @@ export default function Sidebar() {
           Create
         </div>
 
-        {/* PROFILE */}
         <div
           className={`nav-item ${isProfileActive ? 'active' : ''}`}
           onClick={() => navigate(`/profile/${user._id}`)}

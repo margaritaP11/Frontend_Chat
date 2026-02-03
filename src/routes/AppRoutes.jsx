@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 
 // Main pages
 import Feed from '../pages/Feed/Feed'
-import Search from '../pages/Search/SearchPage' // ← ПРАВИЛЬНО
+import Search from '../pages/Search/SearchPanel' // ← ПРАВИЛЬНО
 import Explore from '../pages/Explore'
 import Chat from '../pages/Chat'
 import Notifications from '../pages/Notifications'
