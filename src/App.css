@@ -1,7 +1,20 @@
+.home-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.routes-layer {
+  position: relative;
+  z-index: 2;
+}
+
 .overlay {
   position: fixed;
   top: 0;
-  left: 240px; /* ← Sidebar НЕ затемнюється */
+  left: 240px; /* ширина Sidebar */
   width: calc(100vw - 240px);
   height: 100vh;
   background: rgba(0, 0, 0, 0.45);

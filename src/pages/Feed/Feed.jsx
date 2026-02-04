@@ -9,6 +9,20 @@ export default function Feed() {
   const [expandedText, setExpandedText] = useState({})
   const [openComments, setOpenComments] = useState({})
 
+  // ⭐ Функція, якої не вистачало — через це компонент падав
+  const formatTime = (dateString) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diff = (now - date) / 1000
+
+    if (diff < 60) return 'just now'
+    if (diff < 3600) return `${Math.floor(diff / 60)} min ago`
+    if (diff < 86400) return `${Math.floor(diff / 3600)} h ago`
+    if (diff < 604800) return `${Math.floor(diff / 86400)} days ago`
+
+    return date.toLocaleDateString()
+  }
+
   useEffect(() => {
     const loadFeed = async () => {
       try {
@@ -28,17 +42,23 @@ export default function Feed() {
     loadFeed()
   }, [])
 
-  const formatTime = (dateString) => {
-    const date = new Date(dateString)
-    const now = new Date()
-    const diff = (now - date) / 1000
+  const toggleFollow = async (userId, isFollowing) => {
+    const url = isFollowing
+      ? `http://localhost:8080/api/follow/unfollow/${userId}`
+      : `http://localhost:8080/api/follow/follow/${userId}`
 
-    if (diff < 60) return 'just now'
-    if (diff < 3600) return `${Math.floor(diff / 60)} min ago`
-    if (diff < 86400) return `${Math.floor(diff / 3600)} h ago`
-    if (diff < 604800) return `${Math.floor(diff / 86400)} days ago`
+    await fetch(url, {
+      method: isFollowing ? 'DELETE' : 'POST',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    })
 
-    return date.toLocaleDateString()
+    setPosts((prev) =>
+      prev.map((p) =>
+        p.user._id === userId ? { ...p, isFollowing: !isFollowing } : p,
+      ),
+    )
   }
 
   const toggleLike = async (postId) => {
@@ -104,7 +124,12 @@ export default function Feed() {
                 </div>
               </div>
 
-              <button className="follow-btn">Follow</button>
+              <button
+                className="follow-btn"
+                onClick={() => toggleFollow(post.user._id, post.isFollowing)}
+              >
+                {post.isFollowing ? 'Unfollow' : 'Follow'}
+              </button>
             </div>
 
             {/* IMAGE */}

@@ -2,8 +2,9 @@ import Sidebar from './components/Sidebar'
 import AppRoutes from './routes/AppRoutes'
 import { useLocation } from 'react-router-dom'
 import CreatePostPage from './pages/CreatePost/CreatePostPage'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SearchPanel from './pages/Search/SearchPanel'
+import Feed from './pages/Feed/Feed'
 
 import './App.css'
 
@@ -18,6 +19,13 @@ export default function App() {
     location.pathname === '/register' ||
     location.pathname === '/reset'
 
+  // Закриваємо пошук при переході на іншу сторінку
+  useEffect(() => {
+    if (isSearchOpen) {
+      setIsSearchOpen(false)
+    }
+  }, [location.pathname])
+
   if (isAuthPage) {
     return <AppRoutes location={location} />
   }
@@ -26,18 +34,34 @@ export default function App() {
     <div style={{ display: 'flex' }}>
       <Sidebar onOpenSearch={() => setIsSearchOpen(true)} />
 
-      <div style={{ marginLeft: '240px', width: '100%', padding: '0 20px' }}>
-        <AppRoutes location={background || location} />
+      <div
+        style={{
+          marginLeft: '240px',
+          width: '100%',
+          padding: '0 20px',
+          position: 'relative',
+        }}
+      >
+        {isSearchOpen && (
+          <div className="home-background">
+            <Feed />
+          </div>
+        )}
 
-        {location.pathname === '/create' && <CreatePostPage />}
+        {/* Основні маршрути */}
+        <div className="routes-layer">
+          <AppRoutes location={background || location} />
+          {location.pathname === '/create' && <CreatePostPage />}
+        </div>
+
+        {/* SearchPanel поверх усього */}
+        {isSearchOpen && (
+          <>
+            <div className="overlay" onClick={() => setIsSearchOpen(false)} />
+            <SearchPanel onClose={() => setIsSearchOpen(false)} />
+          </>
+        )}
       </div>
-
-      {isSearchOpen && (
-        <>
-          <div className="overlay" onClick={() => setIsSearchOpen(false)} />
-          <SearchPanel onClose={() => setIsSearchOpen(false)} />
-        </>
-      )}
     </div>
   )
 }

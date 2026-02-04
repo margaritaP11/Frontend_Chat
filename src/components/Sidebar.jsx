@@ -19,15 +19,6 @@ export default function Sidebar({ onOpenSearch }) {
   const location = useLocation()
   const { user } = useContext(AuthContext)
 
-  const pathname = location.pathname
-  const search = location.search
-
-  const isCreateActive =
-    pathname === `/profile/${user?._id}` && search.includes('create=true')
-
-  const isProfileActive =
-    pathname === `/profile/${user?._id}` && !search.includes('create=true')
-
   return (
     <div className="sidebar">
       <img src={logo} alt="ICKGRAM" className="logo_img" />
@@ -38,7 +29,6 @@ export default function Sidebar({ onOpenSearch }) {
           Home
         </div>
 
-        {/* 🔥 ВАЖЛИВО: відкриваємо SearchPanel */}
         <div className="nav-item" onClick={onOpenSearch}>
           <FiSearch className="icon" />
           Search
@@ -59,18 +49,13 @@ export default function Sidebar({ onOpenSearch }) {
           Notifications
         </div>
 
-        <div
-          className={`nav-item ${isCreateActive ? 'active' : ''}`}
-          onClick={() => navigate(`/profile/${user._id}?create=true`)}
-        >
+        <div className="nav-item" onClick={() => navigate('/create')}>
           <FiPlusSquare className="icon" />
           Create
         </div>
 
-        <div
-          className={`nav-item ${isProfileActive ? 'active' : ''}`}
-          onClick={() => navigate(`/profile/${user._id}`)}
-        >
+        {/* 🔥 Твій профіль */}
+        <div className="nav-item" onClick={() => navigate('/profile/me')}>
           <FiUser className="icon" />
           Profile
         </div>
