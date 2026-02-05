@@ -20,6 +20,9 @@ export default function UserProfile() {
   const [comments, setComments] = useState([])
   const [newComment, setNewComment] = useState('')
 
+  const [followersCount, setFollowersCount] = useState(0)
+  const [followingCount, setFollowingCount] = useState(0)
+
   const isCreateOpen = params.get('create') === 'true'
 
   // LOAD POSTS
@@ -44,7 +47,41 @@ export default function UserProfile() {
     if (user?._id) fetchPosts()
   }, [user])
 
-  // OPEN POST MODAL
+  // LOAD FOLLOWERS & FOLLOWING
+  useEffect(() => {
+    if (!user?._id) return
+
+    const loadFollowers = async () => {
+      const res = await fetch(
+        `http://localhost:8080/api/follow/followers/${user._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
+      )
+      const data = await res.json()
+      setFollowersCount(data.length)
+    }
+
+    const loadFollowing = async () => {
+      const res = await fetch(
+        `http://localhost:8080/api/follow/following/${user._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
+      )
+      const data = await res.json()
+      setFollowingCount(data.length)
+    }
+
+    loadFollowers()
+    loadFollowing()
+  }, [user])
+
+  // OPEN POST MODAL — ВИПРАВЛЕНО
   const openPostModal = async (post) => {
     setSelectedPost(post)
 
@@ -57,10 +94,14 @@ export default function UserProfile() {
           },
         },
       )
+
       const data = await res.json()
 
+      // ГОЛОВНЕ ВИПРАВЛЕННЯ — comments завжди масив
+      const safeComments = Array.isArray(data) ? data : []
+
       setComments(
-        data.map((c) => ({
+        safeComments.map((c) => ({
           id: c._id,
           author: c.user?.name || 'user',
           text: c.text,
@@ -72,7 +113,7 @@ export default function UserProfile() {
       )
     } catch (err) {
       console.error('FETCH COMMENTS ERROR:', err)
-      setComments([])
+      setComments([]) // fallback
     }
 
     setNewComment('')
@@ -272,9 +313,8 @@ export default function UserProfile() {
         <ProfileHeader
           user={user}
           postsCount={posts.length}
-          showFullBio={false}
-          setShowFullBio={() => {}}
-          bioLimit={60}
+          followersCount={followersCount}
+          followingCount={followingCount}
         />
 
         <div className="profile-grid">

@@ -1,7 +1,8 @@
 import './PostGrid.css'
 
 export default function PostGrid({ posts, onOpenPost }) {
-  if (!posts || posts.length === 0) {
+  // Головне виправлення — перевіряємо, що це масив
+  if (!Array.isArray(posts) || posts.length === 0) {
     return <p>No posts yet</p>
   }
 
