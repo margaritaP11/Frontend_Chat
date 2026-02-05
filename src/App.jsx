@@ -21,9 +21,7 @@ export default function App() {
 
   // Закриваємо пошук при переході на іншу сторінку
   useEffect(() => {
-    if (isSearchOpen) {
-      setIsSearchOpen(false)
-    }
+    setIsSearchOpen(false)
   }, [location.pathname])
 
   if (isAuthPage) {
@@ -49,9 +47,11 @@ export default function App() {
         )}
 
         {/* Основні маршрути */}
-        <div className="routes-layer">
+        <div
+          className="routes-layer"
+          style={{ display: isSearchOpen ? 'none' : 'block' }}
+        >
           <AppRoutes location={background || location} />
-          {location.pathname === '/create' && <CreatePostPage />}
         </div>
 
         {/* SearchPanel поверх усього */}

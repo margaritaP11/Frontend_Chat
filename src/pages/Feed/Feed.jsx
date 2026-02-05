@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './Feed.css'
 
 import likeIcon from '../../assets/Like.svg'
@@ -8,8 +9,8 @@ export default function Feed() {
   const [posts, setPosts] = useState([])
   const [expandedText, setExpandedText] = useState({})
   const [openComments, setOpenComments] = useState({})
+  const navigate = useNavigate()
 
-  // ⭐ Функція, якої не вистачало — через це компонент падав
   const formatTime = (dateString) => {
     const date = new Date(dateString)
     const now = new Date()
@@ -111,7 +112,11 @@ export default function Feed() {
           <div key={post._id} className="feed-post">
             {/* HEADER */}
             <div className="feed-header">
-              <div className="feed-header-left">
+              <div
+                className="feed-header-left"
+                onClick={() => navigate(`/profile/${post.user._id}`)}
+                style={{ cursor: 'pointer' }}
+              >
                 <img
                   src={post.user?.avatar || 'https://placehold.co/40'}
                   className="feed-avatar"
@@ -152,7 +157,13 @@ export default function Feed() {
 
             {/* CAPTION */}
             <div className="feed-caption">
-              <span className="feed-username">{post.user?.username}</span>
+              <span
+                className="feed-username"
+                onClick={() => navigate(`/profile/${post.user._id}`)}
+                style={{ cursor: 'pointer' }}
+              >
+                {post.user?.username}
+              </span>
 
               {!isLong && <span>{post.text}</span>}
 
@@ -184,7 +195,13 @@ export default function Feed() {
             {/* FIRST COMMENT */}
             {post.comments?.length > 0 && post.comments[0]?.user && (
               <div className="feed-comment">
-                <span className="comment-user">
+                <span
+                  className="comment-user"
+                  onClick={() =>
+                    navigate(`/profile/${post.comments[0].user._id}`)
+                  }
+                  style={{ cursor: 'pointer' }}
+                >
                   {post.comments[0].user.username}
                 </span>
                 <span>{post.comments[0].text}</span>
@@ -205,7 +222,13 @@ export default function Feed() {
               <div className="all-comments">
                 {post.comments.map((c) => (
                   <div key={c._id} className="feed-comment">
-                    <span className="comment-user">{c.user.username}</span>
+                    <span
+                      className="comment-user"
+                      onClick={() => navigate(`/profile/${c.user._id}`)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {c.user.username}
+                    </span>
                     <span>{c.text}</span>
                   </div>
                 ))}

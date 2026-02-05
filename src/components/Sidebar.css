@@ -7,8 +7,11 @@
   flex-direction: column;
   background: #fff;
   position: fixed;
+
   left: 0;
   top: 0;
+
+  z-index: 1000; /* ← Sidebar завжди зверху */
 }
 
 .logo-img {
