@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 
 // Main pages
 import Feed from '../pages/Feed/Feed'
-import Explore from '../pages/Explore'
+import Explore from '../pages/Explore/Explore'
 import Chat from '../pages/Chat'
 import Notifications from '../pages/Notifications'
 
