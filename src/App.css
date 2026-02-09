@@ -1,16 +1,31 @@
+.app-layout {
+  display: flex;
+}
+
+.content-wrapper {
+  margin-left: 240px;
+  width: 100%;
+  padding: 0 20px;
+  position: relative;
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.routes-layer {
+  flex: 1;
+  position: relative;
+  z-index: 2;
+}
+
 .home-background {
   top: 0;
   left: 0;
   width: 100%;
-
   position: fixed;
   inset: 0;
   z-index: 300;
-}
-
-.routes-layer {
-  position: relative;
-  z-index: 2;
 }
 
 .overlay {

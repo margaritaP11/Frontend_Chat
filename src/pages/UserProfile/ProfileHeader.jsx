@@ -5,6 +5,7 @@ export default function ProfileHeader({
   postsCount,
   followersCount,
   followingCount,
+  isOwner,
 }) {
   return (
     <div className="profile-header">
@@ -14,7 +15,18 @@ export default function ProfileHeader({
       />
 
       <div className="profile-info">
-        <h2>{user.username}</h2>
+        <div className="profile-top-row">
+          <h2 className="profile-username">{user.username}</h2>
+
+          {isOwner && (
+            <button
+              className="edit-profile-btn"
+              onClick={() => (window.location.href = '/profile/edit')}
+            >
+              Edit Profile
+            </button>
+          )}
+        </div>
 
         <div className="profile-stats">
           <span>

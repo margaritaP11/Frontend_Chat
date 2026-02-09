@@ -39,7 +39,7 @@ export default function Sidebar({ onOpenSearch }) {
           Explore
         </div>
 
-        <div className="nav-item" onClick={() => navigate('/chat')}>
+        <div className="nav-item" onClick={() => navigate('/messages')}>
           <FiMessageCircle className="icon" />
           Messages
         </div>
@@ -54,7 +54,6 @@ export default function Sidebar({ onOpenSearch }) {
           Create
         </div>
 
-        {/* 🔥 Твій профіль */}
         <div className="nav-item" onClick={() => navigate('/profile/me')}>
           <FiUser className="icon" />
           Profile

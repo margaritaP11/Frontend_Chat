@@ -9,37 +9,29 @@ export default function AuthProvider({ children }) {
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (!token) {
-      console.warn('Нет токена в localStorage')
       setLoading(false)
       return
     }
 
     fetch('http://localhost:8080/api/profile/me', {
-      method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => {
-        if (!res.ok) {
-          throw new Error('Ошибка авторизации')
-        }
+        if (!res.ok) throw new Error('Ошибка авторизации')
         return res.json()
       })
       .then((data) => {
-        console.log('PROFILE LOADED:', data)
         setUser(data.profile || data)
         setLoading(false)
       })
-      .catch((err) => {
-        console.error('Ошибка загрузки профиля:', err.message)
+      .catch(() => {
         setUser(null)
         setLoading(false)
       })
   }, [])
 
-  // 🔥 ЛОГИН
   const login = async ({ identifier, password }) => {
     setLoading(true)
     setError(null)
@@ -58,12 +50,11 @@ export default function AuthProvider({ children }) {
       throw new Error(data.message)
     }
 
-    localStorage.setItem('token', data.token || data.accessToken)
+    localStorage.setItem('token', data.token)
     setUser(data.user)
     setLoading(false)
   }
 
-  // 🔥 РЕГИСТРАЦИЯ — ВОТ ЭТО ТЫ ДОЛЖНА ДОБАВИТЬ
   const register = async ({ username, fullName, email, password }) => {
     setLoading(true)
     setError(null)
@@ -82,14 +73,19 @@ export default function AuthProvider({ children }) {
       throw new Error(data.message)
     }
 
-    localStorage.setItem('token', data.token || data.accessToken)
+    localStorage.setItem('token', data.token)
     setUser(data.user)
     setLoading(false)
   }
 
+  const logout = () => {
+    localStorage.removeItem('token')
+    setUser(null)
+  }
+
   return (
     <AuthContext.Provider
-      value={{ user, setUser, loading, error, login, register }}
+      value={{ user, setUser, loading, error, login, register, logout }}
     >
       {children}
     </AuthContext.Provider>

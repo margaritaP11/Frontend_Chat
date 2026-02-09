@@ -315,6 +315,7 @@ export default function UserProfile() {
           postsCount={posts.length}
           followersCount={followersCount}
           followingCount={followingCount}
+          isOwner={true}
         />
 
         <div className="profile-grid">

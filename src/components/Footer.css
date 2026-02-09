@@ -1,0 +1,42 @@
+.footer-wrapper {
+  width: 100%;
+  padding: 20px 0;
+  background: #fff;
+  text-align: center;
+
+  margin-top: 40px;
+}
+
+.footer-menu {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin-bottom: 10px;
+  margin-left: 150px;
+}
+
+.footer-menu span {
+  font-size: 14px;
+  color: #737373;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.footer-menu span:hover {
+  color: #000;
+}
+
+.footer-copy {
+  font-size: 13px;
+  color: #666;
+  margin-left: 140px;
+  margin-top: 48px;
+}
+
+.footer-brand {
+  color: #737373;
+
+  cursor: pointer;
+  text-decoration: underline;
+}

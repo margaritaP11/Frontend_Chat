@@ -1,0 +1,77 @@
+.notif-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 40px;
+  gap: 20px;
+  max-width: 600px;
+}
+
+.notif-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.notif-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 8px;
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.notif-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.notif-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.notif-text {
+  flex: 1;
+  font-size: 15px;
+  line-height: 1.3;
+  color: #222;
+}
+
+.notif-username {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.notif-username:hover {
+  text-decoration: underline;
+}
+
+.notif-time {
+  color: #777;
+  font-size: 13px;
+  margin-left: 4px;
+}
+
+.notif-post-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  object-fit: cover;
+  cursor: pointer;
+}
+.notif-delete {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #999;
+  padding: 4px;
+}
+
+.notif-delete:hover {
+  color: #000;
+}

@@ -1,0 +1,5 @@
+.messages-layout {
+  display: grid;
+  grid-template-columns: 398px 797px 1fr;
+  height: 100vh;
+}

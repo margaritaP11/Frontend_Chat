@@ -1,4 +1,5 @@
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
+
 import { useEffect, useState, useContext } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import PostModal from '../UserProfile/PostModal'
@@ -7,6 +8,7 @@ import './OtherProfile.css'
 export default function OtherProfilePage() {
   const { id } = useParams()
   const { user: currentUser } = useContext(AuthContext)
+  const navigate = useNavigate()
 
   const [profile, setProfile] = useState(null)
   const [posts, setPosts] = useState([])
@@ -256,7 +258,12 @@ export default function OtherProfilePage() {
                 {isFollowing ? 'Unfollow' : 'Follow'}
               </button>
 
-              <button className="message-btn">Message</button>
+              <button
+                className="message-btn"
+                onClick={() => navigate(`/messages/${profile._id}`)}
+              >
+                Message
+              </button>
             </div>
           </div>
 

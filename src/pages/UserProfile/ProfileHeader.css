@@ -29,17 +29,10 @@
   font-weight: 400;
 }
 
-.profile-edit-button {
-  padding: 8px 34px;
-  background: #efefef;
-  border: 1px solid #efefef;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.profile-edit-button:hover {
-  background: #e3e3e3;
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .profile-stats {
@@ -98,4 +91,32 @@
 
 .profile-website:hover {
   text-decoration: underline;
+}
+.profile-top-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-username {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.edit-profile-btn {
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid #dbdbdb;
+  background: #ffffff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.edit-profile-btn:hover {
+  background: #fafafa;
+  border-color: #c7c7c7;
 }
