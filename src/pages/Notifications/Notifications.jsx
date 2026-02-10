@@ -1,10 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../../context/AuthContext'
+import { io } from 'socket.io-client'
 import './Notifications.css'
+
+const socket = io('http://localhost:8080')
 
 export default function Notifications() {
   const [items, setItems] = useState([])
   const navigate = useNavigate()
+  const { user } = useContext(AuthContext)
+
+  // ⭐ Підключення до сокета
+  useEffect(() => {
+    if (user) {
+      socket.emit('join', user._id)
+    }
+  }, [user])
 
   // ⭐ Завантаження уведомлень
   useEffect(() => {
@@ -21,13 +33,16 @@ export default function Notifications() {
 
         const data = await res.json()
         setItems(data)
+
+        // ⭐ Скидаємо unread у бекенді
+        socket.emit('mark_notifications_read', user._id)
       } catch (err) {
         console.error('LOAD NOTIFICATIONS ERROR:', err)
       }
     }
 
     load()
-  }, [])
+  }, [user])
 
   // ⭐ Видалення уведомлення
   const deleteNotification = async (id) => {
@@ -62,14 +77,12 @@ export default function Notifications() {
 
       {items.map((n) => (
         <div key={n._id} className="notif-item">
-          {/* Аватар */}
           <img
             src={n.fromUser.avatar}
             className="notif-avatar"
             onClick={() => navigate(`/profile/${n.fromUser._id}`)}
           />
 
-          {/* Текст уведомления */}
           <div className="notif-text">
             <span
               className="notif-username"
@@ -81,11 +94,11 @@ export default function Notifications() {
             {n.type === 'follow' && ' started following you'}
             {n.type === 'like' && ' liked your post'}
             {n.type === 'comment' && ' commented your post'}
+            {n.type === 'message' && ' sent you a message'}
 
             <span className="notif-time"> · {formatTime(n.createdAt)}</span>
           </div>
 
-          {/* Прев'ю поста */}
           {n.post && (
             <img
               src={n.post.image}
@@ -94,7 +107,6 @@ export default function Notifications() {
             />
           )}
 
-          {/* Хрестик */}
           <button
             className="notif-delete"
             onClick={() => deleteNotification(n._id)}

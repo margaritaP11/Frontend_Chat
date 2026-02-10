@@ -4,6 +4,10 @@
 *::after {
   box-sizing: border-box;
 }
+#root {
+  max-width: 100%;
+  overflow-x: hidden;
+}
 
 /* Сброс отступов */
 html,

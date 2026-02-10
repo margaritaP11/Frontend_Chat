@@ -3,22 +3,23 @@
   padding: 20px 0;
   background: #fff;
   text-align: center;
-
   margin-top: 40px;
 }
 
+/* Меню */
 .footer-menu {
   display: flex;
   justify-content: center;
-  gap: 50px;
+  flex-wrap: wrap;
+  gap: 30px;
+
   margin-bottom: 10px;
-  margin-left: 150px;
+  margin-left: 0; /* прибираємо жорсткий зсув */
 }
 
 .footer-menu span {
   font-size: 14px;
   color: #737373;
-
   cursor: pointer;
   transition: 0.2s;
 }
@@ -27,16 +28,54 @@
   color: #000;
 }
 
+/* Копірайт */
 .footer-copy {
   font-size: 13px;
   color: #666;
-  margin-left: 140px;
-  margin-top: 48px;
+  margin-top: 25px;
+  margin-left: 0; /* прибираємо зсув */
 }
 
 .footer-brand {
   color: #737373;
-
   cursor: pointer;
   text-decoration: underline;
+}
+@media (max-width: 1024px) {
+  .footer-wrapper {
+    padding: 20px 0 100px; /* 100px — щоб не перекривало мобільне меню */
+    margin-top: 30px;
+  }
+
+  .footer-menu {
+    gap: 20px;
+  }
+
+  .footer-menu span {
+    font-size: 13px;
+  }
+
+  .footer-copy {
+    font-size: 12px;
+    margin-top: 20px;
+  }
+}
+@media (max-width: 767px) {
+  .footer-wrapper {
+    padding: 15px 0 90px;
+    margin-top: 20px;
+  }
+
+  .footer-menu {
+    gap: 15px;
+  }
+
+  .footer-menu span {
+    font-size: 12px;
+  }
+
+  .footer-copy {
+    font-size: 11px;
+    margin-top: 15px;
+  }
 }

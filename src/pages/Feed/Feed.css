@@ -1,37 +1,39 @@
+/* КОНТЕЙНЕР — 2 КОЛОНКИ ЯК У МАКЕТІ */
 .feed-container {
   display: grid;
   grid-template-columns: repeat(2, 404px);
   justify-content: center;
-  gap: 20px;
-  padding-top: 20px;
+  gap: 24px; /* у макеті трохи більше повітря */
+  padding-top: 40px;
+  padding-bottom: 60px;
 }
 
-/* POST */
+/* КАРТКА ПОСТА */
 .feed-post {
-  width: 100%;
+  width: 404px; /* чітко як у макеті */
   background: #fff;
   border: 1px solid #dbdbdb;
   border-radius: 12px;
   overflow: hidden;
 }
 
-/* HEADER */
+/* ХЕДЕР */
 .feed-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px;
+  padding: 14px 16px;
 }
 
 .feed-header-left {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .feed-avatar {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
 }
 
@@ -42,6 +44,7 @@
 
 .feed-username {
   font-weight: 600;
+  font-size: 15px;
 }
 
 .feed-date {
@@ -49,37 +52,38 @@
   color: #777;
 }
 
+/* КНОПКА FOLLOW */
 .follow-btn {
-  background-color: white;
+  background: none;
   border: none;
   color: #0095f6;
-  cursor: pointer;
   font-weight: 600;
-  white-space: nowrap;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .follow-btn:hover {
   color: #b80d41;
 }
 
-/* IMAGE */
+/* ФОТО */
 .feed-image {
   width: 100%;
   height: auto;
 }
 
-/* ACTIONS */
+/* ДІЇ */
 .feed-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px;
+  gap: 14px;
+  padding: 12px 16px;
 }
 
 .like-icon,
 .comment-icon {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   cursor: pointer;
   transition: transform 0.15s ease;
 }
@@ -89,23 +93,23 @@
   transform: scale(1.1);
 }
 
-.likes-count {
-  font-weight: 600;
-}
 .like-emoji {
-  font-size: 23px; /* ← збільшення розміру емоджі */
-  line-height: 1;
+  font-size: 26px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
 }
 
-/* CAPTION */
+.likes-count {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+/* ОПИС */
 .feed-caption {
-  padding: 0 12px 12px;
+  padding: 0 16px 12px;
   display: flex;
   gap: 6px;
   font-size: 14px;
+  line-height: 1.4;
 }
 
 .more-btn {
@@ -114,20 +118,45 @@
   margin-left: 4px;
   font-weight: 500;
 }
-.more-btn:hover {
+
+/* ПЕРШИЙ КОМЕНТ */
+.feed-comment {
+  padding: 0 16px 6px;
+  display: flex;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.comment-user {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ПОКАЗАТИ ВСІ КОМЕНТИ */
+.feed-comments-link {
+  padding: 0 16px 12px;
+  font-size: 14px;
+  color: #777;
+  cursor: pointer;
+}
+
+.feed-comments-link:hover {
   color: #000;
 }
+
+/* ВСІ КОМЕНТИ */
 .all-comments {
-  padding: 0 12px 12px;
+  padding: 0 16px 12px;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-/* END */
+/* КІНЕЦЬ СТРІЧКИ */
 .feed-end {
   text-align: center;
   color: #777;
   margin-top: 20px;
   padding-bottom: 40px;
+  font-size: 14px;
 }

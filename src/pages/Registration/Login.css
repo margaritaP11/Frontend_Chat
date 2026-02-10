@@ -158,3 +158,84 @@
   color: #8e8e8e;
   font-weight: 500;
 }
+@media (max-width: 1024px) {
+  .auth-page {
+    max-width: 100%;
+    margin: 40px auto;
+    gap: 20px;
+    padding: 0 20px;
+  }
+
+  .auth-phone img {
+    max-width: 300px;
+    height: auto;
+  }
+
+  .auth-card {
+    width: 330px;
+  }
+
+  .auth-box {
+    padding: 24px 32px;
+    height: auto;
+  }
+
+  .secondary {
+    height: auto;
+    padding: 20px;
+  }
+}
+@media (max-width: 767px) {
+  .auth-page {
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+    padding: 0 16px;
+    gap: 20px;
+  }
+
+  .auth-phone {
+    display: none;
+  }
+
+  .auth-card {
+    width: 100%;
+    max-width: 360px;
+  }
+
+  .auth-box {
+    padding: 20px 24px;
+    width: 100%;
+    height: auto;
+  }
+
+  .secondary {
+    padding: 18px;
+    height: auto;
+    font-size: 13px;
+  }
+
+  .auth-logo {
+    width: 160px;
+    height: auto;
+  }
+
+  .auth-subtitle {
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+
+  .auth-form input {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .auth-form button[type='submit'] {
+    padding: 10px 0;
+    font-size: 14px;
+  }
+
+  .auth-note {
+    font-size: 10px;
+  }
+}

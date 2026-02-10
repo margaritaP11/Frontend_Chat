@@ -5,6 +5,9 @@ import Sidebar from '../../components/Sidebar'
 import ConversationsList from './ConversationsList'
 import ChatWindow from './ChatWindow'
 import './MessagesLayout.css'
+import { io } from 'socket.io-client'
+
+const socket = io('http://localhost:8080')
 
 export default function MessagesPage() {
   const { user } = useContext(AuthContext)
@@ -13,7 +16,14 @@ export default function MessagesPage() {
   const [conversations, setConversations] = useState([])
   const [activeChat, setActiveChat] = useState(null)
 
-  // ⭐ Загружаем список диалогов ТОЛЬКО когда user загружен
+  // ⭐ Підключення до сокета
+  useEffect(() => {
+    if (user) {
+      socket.emit('join', user._id)
+    }
+  }, [user])
+
+  // ⭐ Завантаження діалогів
   useEffect(() => {
     if (!user) return
 
@@ -35,18 +45,39 @@ export default function MessagesPage() {
     load()
   }, [user])
 
-  // ⭐ Открываем чат
+  // ⭐ Видалення діалогу
+  const deleteDialog = async (dialogId) => {
+    try {
+      await fetch(`http://localhost:8080/api/messages/dialog/${dialogId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+
+      // Прибираємо діалог з UI
+      setConversations((prev) => prev.filter((c) => c._id !== dialogId))
+
+      // Якщо видалили активний чат → закриваємо
+      if (activeChat?._id === dialogId) {
+        setActiveChat(null)
+      }
+    } catch (err) {
+      console.error('DELETE DIALOG ERROR:', err)
+    }
+  }
+
+  // ⭐ Відкриття чату + скидання unread
   useEffect(() => {
     if (!user) return
 
-    // 1) Если есть userId в URL → открываем этот чат
-    if (userId) {
-      const existing = conversations.find((c) => c._id === userId)
+    const openChat = async () => {
+      if (userId) {
+        const existing = conversations.find((c) => c._id === userId)
 
-      if (existing) {
-        setActiveChat(existing)
-      } else {
-        const loadProfile = async () => {
+        if (existing) {
+          setActiveChat(existing)
+        } else {
           const res = await fetch(`http://localhost:8080/api/profile/${userId}`)
           const profile = await res.json()
 
@@ -59,15 +90,21 @@ export default function MessagesPage() {
             lastMessage: '',
           })
         }
-        loadProfile()
+
+        // ⭐ Скидаємо unread у бекенді
+        socket.emit('mark_messages_read', {
+          userId: user._id,
+          otherUserId: userId,
+        })
       }
-      return
+
+      // Якщо просто /messages → відкриваємо перший діалог
+      if (!userId && conversations.length > 0 && !activeChat) {
+        setActiveChat(conversations[0])
+      }
     }
 
-    // 2) Если просто /messages → открываем первый диалог
-    if (conversations.length > 0 && !activeChat) {
-      setActiveChat(conversations[0])
-    }
+    openChat()
   }, [userId, conversations, user])
 
   return (
@@ -78,9 +115,10 @@ export default function MessagesPage() {
         conversations={conversations}
         activeChat={activeChat}
         setActiveChat={setActiveChat}
+        deleteDialog={deleteDialog}
       />
 
-      <ChatWindow chat={activeChat} user={user} />
+      <ChatWindow chat={activeChat} user={user} socket={socket} />
     </div>
   )
 }

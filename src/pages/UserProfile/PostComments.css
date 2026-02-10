@@ -66,3 +66,55 @@
   gap: 12px;
   margin-left: 40px;
 }
+/* ================= MOBILE (до 767px) ================= */
+@media (max-width: 767px) {
+  .comments-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 8px;
+    gap: 4px;
+  }
+
+  .comment-row {
+    gap: 6px;
+  }
+
+  .comment-avatar {
+    width: 24px;
+    height: 24px;
+  }
+
+  .comment-author {
+    font-size: 12.5px;
+  }
+
+  .comment-text {
+    font-size: 12.5px;
+  }
+
+  .comment-meta {
+    font-size: 10px;
+    margin-left: 28px;
+  }
+
+  /* Форма вводу — завжди внизу */
+  .comment-form {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-top: 1px solid #efefef;
+    background: #fff;
+  }
+
+  .comment-input {
+    flex: 1;
+    font-size: 13px;
+  }
+
+  .send-button {
+    font-size: 13px;
+    font-weight: 600;
+  }
+}

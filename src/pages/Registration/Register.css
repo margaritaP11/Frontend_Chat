@@ -98,3 +98,88 @@
   text-decoration: none;
   color: #00376b;
 }
+
+@media (max-width: 1024px) {
+  .register-page {
+    max-width: 100%;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+
+  .register-box {
+    padding: 26px 32px;
+  }
+
+  .register-secondary {
+    padding: 18px 32px;
+    font-size: 13px;
+  }
+
+  .register-logo {
+    width: 170px;
+    height: auto;
+  }
+
+  .register-subtitle {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  .register-form input {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .register-form button {
+    padding: 10px 0;
+    font-size: 14px;
+  }
+
+  .register-note {
+    font-size: 10px;
+  }
+}
+@media (max-width: 767px) {
+  .register-page {
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 0 16px;
+    gap: 16px;
+  }
+
+  .register-box {
+    width: 100%;
+    padding: 20px 22px;
+  }
+
+  .register-secondary {
+    width: 100%;
+    padding: 16px 22px;
+    font-size: 13px;
+  }
+
+  .register-logo {
+    width: 150px;
+    height: auto;
+  }
+
+  .register-subtitle {
+    font-size: 15px;
+    margin-bottom: 14px;
+  }
+
+  .register-form input {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .register-form button {
+    padding: 10px 0;
+    font-size: 14px;
+  }
+
+  .register-note {
+    font-size: 10px;
+    margin-top: 10px;
+  }
+}

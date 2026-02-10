@@ -1,3 +1,19 @@
+html,
+body {
+  overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
 .app-layout {
   display: flex;
 }
@@ -6,11 +22,11 @@
   margin-left: 240px;
   width: 100%;
   padding: 0 20px;
-  position: relative;
-
   min-height: 100vh;
+
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .routes-layer {
@@ -19,22 +35,29 @@
   z-index: 2;
 }
 
-.home-background {
-  top: 0;
-  left: 0;
-  width: 100%;
-  position: fixed;
-  inset: 0;
-  z-index: 300;
+/* Планшети + телефони (1024px і нижче) */
+@media (max-width: 1024px) {
+  .sidebar {
+    display: none !important;
+  }
+
+  .app-layout {
+    display: block;
+  }
+
+  #root {
+    max-width: 100%;
+  }
+
+  .content-wrapper {
+    margin-left: 0 !important;
+    padding: 70px 12px 80px; /* місце під topbar + footer */
+  }
 }
 
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 240px;
-  width: calc(100vw - 240px);
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(3px);
-  z-index: 500;
+/* Телефони (767px і нижче) */
+@media (max-width: 767px) {
+  .content-wrapper {
+    padding: 70px 12px 80px;
+  }
 }

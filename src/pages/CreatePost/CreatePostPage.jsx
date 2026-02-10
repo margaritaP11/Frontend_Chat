@@ -1,14 +1,19 @@
 import { useState, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext'
 import uploadIcon from '../../assets/Download1.svg'
 import emojiIcon from '../../assets/emoji.svg'
 import './CreatePostPage.css'
 
-export default function CreatePostPage({ onClose }) {
+export default function CreatePostPage() {
+  const navigate = useNavigate()
   const { user } = useContext(AuthContext)
+
   const [imageFile, setImageFile] = useState(null)
   const [caption, setCaption] = useState('')
   const [loading, setLoading] = useState(false)
+
+  const onClose = () => navigate(-1) // ← ТЕПЕР Є onClose
 
   let avatarSrc = 'https://placehold.co/40'
   const rawAvatar = user?.avatar?.url || user?.avatar
@@ -42,7 +47,7 @@ export default function CreatePostPage({ onClose }) {
       console.log('POST CREATED:', data)
 
       setLoading(false)
-      onClose() // закрываем модалку
+      onClose() // ← тепер працює
     } catch (err) {
       console.error('POST CREATE ERROR:', err)
       setLoading(false)
@@ -98,7 +103,6 @@ export default function CreatePostPage({ onClose }) {
 
             <div className="caption-footer">
               <img src={emojiIcon} alt="emoji" className="emoji-icon" />
-
               <span className="char-count">{caption.length}/2200</span>
             </div>
 

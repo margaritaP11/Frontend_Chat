@@ -28,10 +28,7 @@ export default function PostModal({
 
   return (
     <div className="modal-wrapper" onClick={onClose}>
-      <div
-        className="modal-layout"
-        onClick={(e) => e.stopPropagation()} // ← НЕ дає закриватися при кліку всередині
-      >
+      <div className="modal-layout" onClick={(e) => e.stopPropagation()}>
         {menuOpen && <div className="modal-darken" />}
 
         {/* LEFT SIDE */}

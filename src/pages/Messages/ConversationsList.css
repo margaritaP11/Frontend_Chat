@@ -58,3 +58,38 @@
   color: #b0b0b0;
   font-size: 11px;
 }
+.conv-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+}
+
+.conv-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.conv-delete {
+  background: transparent;
+  border: none;
+  color: #999;
+  font-size: 16px;
+  cursor: pointer;
+  opacity: 0;
+  transition: 0.2s;
+  padding: 4px;
+}
+
+.conv-item:hover .conv-delete {
+  opacity: 1;
+}
+
+.conv-delete:hover {
+  color: #ff3b30;
+}

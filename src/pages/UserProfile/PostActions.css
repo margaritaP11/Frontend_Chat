@@ -143,3 +143,114 @@
   opacity: 0.3;
   cursor: default;
 }
+/* ================= TABLET (до 1024px) ================= */
+@media (max-width: 1024px) {
+  .comments-list {
+    gap: 5px;
+    margin-top: 6px;
+  }
+
+  .comment-avatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .comment-author {
+    font-size: 13px;
+  }
+
+  .comment-text {
+    font-size: 13px;
+  }
+
+  .likes-count {
+    font-size: 13px;
+  }
+
+  .time-ago {
+    font-size: 11px;
+  }
+
+  .comment-delete {
+    font-size: 12px;
+  }
+
+  .comment-meta {
+    font-size: 10px;
+    margin-left: 34px;
+  }
+}
+
+/* ================= MOBILE (до 767px) ================= */
+@media (max-width: 767px) {
+  .comments-list {
+    flex: 1;
+    gap: 4px;
+    margin-top: 4px;
+    padding-right: 4px;
+  }
+
+  .comment-block {
+    gap: 2px;
+  }
+
+  .comment-row {
+    gap: 6px;
+  }
+
+  .comment-avatar {
+    width: 24px;
+    height: 24px;
+  }
+
+  .comment-author {
+    font-size: 12.5px;
+  }
+
+  .comment-text {
+    font-size: 12.5px;
+    line-height: 1.3;
+  }
+
+  .comment-like {
+    font-size: 14px;
+  }
+
+  .likes-count {
+    font-size: 12.5px;
+  }
+
+  .time-ago {
+    font-size: 10px;
+  }
+
+  .comment-delete {
+    font-size: 11px;
+  }
+
+  .comment-meta {
+    font-size: 9.5px;
+    margin-left: 28px;
+    gap: 6px;
+  }
+
+  /* Форма вводу коментаря */
+  .comment-form {
+    gap: 8px;
+    padding: 10px 0;
+  }
+
+  .emoji {
+    font-size: 18px;
+    margin-right: 4px;
+  }
+
+  .comment-input {
+    font-size: 13px;
+    padding: 4px 0;
+  }
+
+  .send-button {
+    font-size: 13px;
+  }
+}

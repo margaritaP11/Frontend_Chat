@@ -150,7 +150,12 @@ export default function Feed() {
                 )}
               </span>
 
-              <img src={commentIcon} className="comment-icon" />
+              <img
+                src={commentIcon}
+                className="comment-icon"
+                onClick={() => toggleComments(post._id)}
+                style={{ cursor: 'pointer' }}
+              />
 
               <span className="likes-count">{post.likesCount} likes</span>
             </div>
@@ -193,7 +198,7 @@ export default function Feed() {
             </div>
 
             {/* FIRST COMMENT */}
-            {post.comments?.length > 0 && post.comments[0]?.user && (
+            {post.comments?.length > 0 && (
               <div className="feed-comment">
                 <span
                   className="comment-user"
@@ -208,19 +213,22 @@ export default function Feed() {
               </div>
             )}
 
-            {/* OPEN COMMENTS */}
-            <div
-              className="feed-comments-link"
-              onClick={() => toggleComments(post._id)}
-            >
-              {commentsOpen
-                ? 'Hide comments'
-                : `View all comments (${post.comments?.length || 0})`}
-            </div>
+            {/* OPEN COMMENTS LINK */}
+            {post.comments?.length > 1 && (
+              <div
+                className="feed-comments-link"
+                onClick={() => toggleComments(post._id)}
+              >
+                {commentsOpen
+                  ? 'Hide comments'
+                  : `View all comments (${post.comments.length})`}
+              </div>
+            )}
 
-            {commentsOpen && (
+            {/* ALL COMMENTS EXCEPT FIRST */}
+            {commentsOpen && post.comments.length > 1 && (
               <div className="all-comments">
-                {post.comments.map((c) => (
+                {post.comments.slice(1).map((c) => (
                   <div key={c._id} className="feed-comment">
                     <span
                       className="comment-user"
