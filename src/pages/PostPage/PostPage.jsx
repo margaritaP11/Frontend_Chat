@@ -14,7 +14,7 @@ export default function PostPage() {
   const [comments, setComments] = useState([])
   const [newComment, setNewComment] = useState('')
 
-  // ⭐ LOAD POST
+  // LOAD POST
   useEffect(() => {
     const loadPost = async () => {
       const res = await fetch(`${BACKEND_URL}/api/posts/${id}`, {
@@ -29,14 +29,14 @@ export default function PostPage() {
           ? data.likes.includes(user._id)
           : false,
         likesCount: Array.isArray(data.likes) ? data.likes.length : 0,
-        image: data.image, // ⭐ ВАЖЛИВО: НЕ ЧІПАЄМО BASE64
+        image: data.image,
       })
     }
 
     loadPost()
   }, [id, user])
 
-  // ⭐ LOAD COMMENTS
+  //
   useEffect(() => {
     const loadComments = async () => {
       const res = await fetch(`${BACKEND_URL}/api/comments/${id}`, {
@@ -66,7 +66,7 @@ export default function PostPage() {
     loadComments()
   }, [id, user])
 
-  // ⭐ LIKE POST
+  //  LIKE POST
   const handleLikeToggle = async () => {
     const res = await fetch(`${BACKEND_URL}/api/likes/${id}`, {
       method: 'POST',
@@ -82,7 +82,7 @@ export default function PostPage() {
     }))
   }
 
-  // ⭐ LIKE COMMENT
+  //  LIKE COMMENT
   const handleCommentLike = async (commentId) => {
     const res = await fetch(`${BACKEND_URL}/api/comments/like/${commentId}`, {
       method: 'POST',
@@ -98,7 +98,7 @@ export default function PostPage() {
     )
   }
 
-  // ⭐ ADD COMMENT
+  //  ADD COMMENT
   const handleAddComment = async () => {
     const text = newComment.trim()
     if (!text) return
