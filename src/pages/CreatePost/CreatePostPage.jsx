@@ -13,7 +13,7 @@ export default function CreatePostPage() {
   const [caption, setCaption] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const onClose = () => navigate(-1) // ← ТЕПЕР Є onClose
+  const onClose = () => navigate(-1)
 
   let avatarSrc = 'https://placehold.co/40'
   const rawAvatar = user?.avatar?.url || user?.avatar

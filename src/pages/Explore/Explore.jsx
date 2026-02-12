@@ -18,12 +18,10 @@ export default function Explore() {
         let data = await res.json()
         console.log('EXPLORE DATA:', data)
 
-        // Якщо бекенд повертає { posts: [...] }
         if (data.posts) {
           data = data.posts
         }
 
-        // Якщо бекенд повертає масив — ок
         if (Array.isArray(data)) {
           data = data.sort(() => Math.random() - 0.5)
           setPosts(data)

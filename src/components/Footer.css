@@ -14,7 +14,7 @@
   gap: 30px;
 
   margin-bottom: 10px;
-  margin-left: 0; /* прибираємо жорсткий зсув */
+  margin-left: 0;
 }
 
 .footer-menu span {
@@ -33,7 +33,7 @@
   font-size: 13px;
   color: #666;
   margin-top: 25px;
-  margin-left: 0; /* прибираємо зсув */
+  margin-left: 0;
 }
 
 .footer-brand {
@@ -43,7 +43,7 @@
 }
 @media (max-width: 1024px) {
   .footer-wrapper {
-    padding: 20px 0 100px; /* 100px — щоб не перекривало мобільне меню */
+    padding: 20px 0 100px;
     margin-top: 30px;
   }
 

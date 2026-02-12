@@ -1,5 +1,3 @@
-/* ---------------- DESKTOP (твій оригінал) ---------------- */
-
 .profile-header {
   display: flex;
   gap: 100px;
@@ -103,8 +101,6 @@
   border-color: #c7c7c7;
 }
 
-/* ---------------- TABLET (до 1024px) ---------------- */
-
 @media (max-width: 1024px) {
   .profile-header {
     gap: 40px;
@@ -128,8 +124,6 @@
     gap: 25px;
   }
 }
-
-/* ---------------- MOBILE (до 767px) ---------------- */
 
 @media (max-width: 767px) {
   .profile-header {

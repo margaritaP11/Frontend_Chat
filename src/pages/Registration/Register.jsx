@@ -19,8 +19,8 @@ export default function Register() {
     try {
       await signup({ email, fullName, username, password })
       navigate('/edit')
-    } catch {
-      // ошибка уже обработана в AuthContext
+    } catch (err) {
+      console.error(err)
     }
   }
 

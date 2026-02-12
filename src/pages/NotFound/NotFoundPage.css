@@ -6,7 +6,6 @@
   height: 100vh;
 }
 
-/* LEFT SIDE */
 .nf-left {
   flex: 1;
   display: flex;
@@ -19,7 +18,6 @@
   object-fit: contain;
 }
 
-/* RIGHT SIDE */
 .nf-right {
   flex: 1;
   padding-left: 20px;

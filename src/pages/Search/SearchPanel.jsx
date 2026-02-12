@@ -9,7 +9,7 @@ export default function SearchPanel({ onClose }) {
 
   useEffect(() => {
     if (!query.trim()) {
-      setResults([])
+      Promise.resolve().then(() => setResults([]))
       return
     }
 
@@ -25,7 +25,8 @@ export default function SearchPanel({ onClose }) {
         )
 
         const data = await res.json()
-        setResults(data)
+
+        Promise.resolve().then(() => setResults(data))
       } catch (err) {
         console.error('SEARCH ERROR:', err)
       }
@@ -36,40 +37,44 @@ export default function SearchPanel({ onClose }) {
 
   return (
     <div className="search-panel">
-      <h2 className="search-title">Search</h2>
+      <div className="search-top">
+        <h2 className="search-title">Search</h2>
 
-      <input
-        type="text"
-        className="search-input"
-        placeholder="Search users..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Search users..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+      </div>
 
-      <div className="search-results">
-        {results.map((u) => (
-          <div
-            key={u._id}
-            className="search-user"
-            onClick={() => {
-              navigate(`/profile/${u._id}`)
-              onClose()
-            }}
-          >
-            <img
-              src={u.avatar || 'https://placehold.co/40'}
-              className="search-avatar"
-            />
-            <div>
-              <div className="search-username">{u.username}</div>
-              <div className="search-name">{u.fullName}</div>
+      <div className="search-scroll">
+        <div className="search-results">
+          {results.map((u) => (
+            <div
+              key={u._id}
+              className="search-user"
+              onClick={() => {
+                navigate(`/profile/${u._id}`)
+                onClose()
+              }}
+            >
+              <img
+                src={u.avatar || 'https://placehold.co/40'}
+                className="search-avatar"
+              />
+              <div>
+                <div className="search-username">{u.username}</div>
+                <div className="search-name">{u.fullName}</div>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
 
-        {query && results.length === 0 && (
-          <div className="no-results">No users found</div>
-        )}
+          {query && results.length === 0 && (
+            <div className="no-results">No users found</div>
+          )}
+        </div>
       </div>
     </div>
   )

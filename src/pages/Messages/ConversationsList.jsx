@@ -4,7 +4,7 @@ export default function ConversationsList({
   conversations,
   activeChat,
   setActiveChat,
-  deleteDialog, // ← ДОДАНО
+  deleteDialog,
 }) {
   return (
     <div className="conv-list">
@@ -16,7 +16,6 @@ export default function ConversationsList({
             key={c._id}
             className={`conv-item ${activeChat?._id === c._id ? 'active' : ''}`}
           >
-            {/* Клік по діалогу */}
             <div className="conv-main" onClick={() => setActiveChat(c)}>
               <img
                 src={c.user?.avatar || 'https://placehold.co/40'}
@@ -30,7 +29,6 @@ export default function ConversationsList({
               </div>
             </div>
 
-            {/* Хрестик справа */}
             <button className="conv-delete" onClick={() => deleteDialog(c._id)}>
               ✕
             </button>

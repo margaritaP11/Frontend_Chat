@@ -1,13 +1,13 @@
 import Sidebar from './components/Sidebar'
 import AppRoutes from './routes/AppRoutes'
 import { useLocation } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import SearchPanel from './pages/Search/SearchPanel'
 import Feed from './pages/Feed/Feed'
 
-import Footer from './components/Footer' // desktop footer
-import MobileTopBar from './components/MobileTopBar' // mobile top bar
-import MobileFooter from './components/MobileFooter' // mobile bottom nav
+import Footer from './components/Footer'
+import MobileTopBar from './components/MobileTopBar'
+import MobileFooter from './components/MobileFooter'
 
 import './App.css'
 
@@ -16,15 +16,19 @@ export default function App() {
   const background = location.state?.background
 
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [lastPath, setLastPath] = useState(location.pathname)
 
   const isAuthPage =
     location.pathname === '/login' ||
     location.pathname === '/register' ||
     location.pathname === '/reset'
 
-  useEffect(() => {
-    setIsSearchOpen(false)
-  }, [location.pathname])
+  if (location.pathname !== lastPath) {
+    setLastPath(location.pathname)
+    if (isSearchOpen) {
+      setIsSearchOpen(false)
+    }
+  }
 
   if (isAuthPage) {
     return <AppRoutes location={location} />
@@ -32,22 +36,18 @@ export default function App() {
 
   return (
     <>
-      {/* ⭐ MOBILE TOP BAR */}
       <MobileTopBar />
 
       <div className="app-layout">
-        {/* ⭐ SIDEBAR (desktop + tablet) */}
         <Sidebar onOpenSearch={() => setIsSearchOpen(true)} />
 
         <div className="content-wrapper">
-          {/* ⭐ SEARCH OVERLAY FEED */}
           {isSearchOpen && (
             <div className="home-background">
               <Feed />
             </div>
           )}
 
-          {/* ⭐ MAIN ROUTES */}
           <div
             className="routes-layer"
             style={{ display: isSearchOpen ? 'none' : 'block' }}
@@ -55,7 +55,6 @@ export default function App() {
             <AppRoutes location={background || location} />
           </div>
 
-          {/* ⭐ SEARCH PANEL */}
           {isSearchOpen && (
             <>
               <div className="overlay" onClick={() => setIsSearchOpen(false)} />
@@ -65,10 +64,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* ⭐ DESKTOP FOOTER */}
       <Footer />
-
-      {/* ⭐ MOBILE FOOTER */}
       <MobileFooter />
     </>
   )

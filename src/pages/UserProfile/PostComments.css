@@ -66,7 +66,7 @@
   gap: 12px;
   margin-left: 40px;
 }
-/* ================= MOBILE (до 767px) ================= */
+
 @media (max-width: 767px) {
   .comments-list {
     flex: 1;
@@ -97,7 +97,6 @@
     margin-left: 28px;
   }
 
-  /* Форма вводу — завжди внизу */
   .comment-form {
     flex-shrink: 0;
     display: flex;

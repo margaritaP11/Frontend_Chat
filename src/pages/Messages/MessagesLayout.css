@@ -3,3 +3,17 @@
   grid-template-columns: 398px 797px 1fr;
   height: 100vh;
 }
+
+@media (max-width: 1024px) {
+  .messages-layout {
+    grid-template-columns: 350px 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .messages-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+}

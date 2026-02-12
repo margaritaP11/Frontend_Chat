@@ -16,14 +16,16 @@ export default function MessagesPage() {
   const [conversations, setConversations] = useState([])
   const [activeChat, setActiveChat] = useState(null)
 
-  // ⭐ Підключення до сокета
+  const isMobile = window.innerWidth <= 767
+
+  // JOIN SOCKET
   useEffect(() => {
     if (user) {
       socket.emit('join', user._id)
     }
   }, [user])
 
-  // ⭐ Завантаження діалогів
+  // LOAD CONVERSATIONS
   useEffect(() => {
     if (!user) return
 
@@ -45,7 +47,7 @@ export default function MessagesPage() {
     load()
   }, [user])
 
-  // ⭐ Видалення діалогу
+  // DELETE DIALOG
   const deleteDialog = async (dialogId) => {
     try {
       await fetch(`http://localhost:8080/api/messages/dialog/${dialogId}`, {
@@ -55,10 +57,8 @@ export default function MessagesPage() {
         },
       })
 
-      // Прибираємо діалог з UI
       setConversations((prev) => prev.filter((c) => c._id !== dialogId))
 
-      // Якщо видалили активний чат → закриваємо
       if (activeChat?._id === dialogId) {
         setActiveChat(null)
       }
@@ -67,7 +67,7 @@ export default function MessagesPage() {
     }
   }
 
-  // ⭐ Відкриття чату + скидання unread
+  // OPEN CHAT
   useEffect(() => {
     if (!user) return
 
@@ -91,14 +91,12 @@ export default function MessagesPage() {
           })
         }
 
-        // ⭐ Скидаємо unread у бекенді
         socket.emit('mark_messages_read', {
           userId: user._id,
           otherUserId: userId,
         })
       }
 
-      // Якщо просто /messages → відкриваємо перший діалог
       if (!userId && conversations.length > 0 && !activeChat) {
         setActiveChat(conversations[0])
       }
@@ -111,14 +109,40 @@ export default function MessagesPage() {
     <div className="messages-layout">
       <Sidebar />
 
-      <ConversationsList
-        conversations={conversations}
-        activeChat={activeChat}
-        setActiveChat={setActiveChat}
-        deleteDialog={deleteDialog}
-      />
+      {/* 📱 MOBILE LOGIC */}
+      {isMobile ? (
+        <>
+          {!activeChat && (
+            <ConversationsList
+              conversations={conversations}
+              activeChat={activeChat}
+              setActiveChat={setActiveChat}
+              deleteDialog={deleteDialog}
+            />
+          )}
 
-      <ChatWindow chat={activeChat} user={user} socket={socket} />
+          {activeChat && (
+            <ChatWindow
+              chat={activeChat}
+              user={user}
+              socket={socket}
+              onBack={() => setActiveChat(null)}
+            />
+          )}
+        </>
+      ) : (
+        /* 🖥 DESKTOP / TABLET */
+        <>
+          <ConversationsList
+            conversations={conversations}
+            activeChat={activeChat}
+            setActiveChat={setActiveChat}
+            deleteDialog={deleteDialog}
+          />
+
+          <ChatWindow chat={activeChat} user={user} socket={socket} />
+        </>
+      )}
     </div>
   )
 }

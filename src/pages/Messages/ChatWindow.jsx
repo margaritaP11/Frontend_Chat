@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import './ChatWindow.css'
 
-export default function ChatWindow({ chat, user }) {
+export default function ChatWindow({ chat, user, socket, onBack }) {
   const [messages, setMessages] = useState([])
   const [text, setText] = useState('')
+
+  const isMobile = window.innerWidth <= 767
 
   useEffect(() => {
     if (!chat) return
@@ -55,6 +57,12 @@ export default function ChatWindow({ chat, user }) {
     <div className="chat-window">
       <div className="chat-header">
         <div className="chat-header-left">
+          {isMobile && (
+            <button className="chat-back" onClick={onBack}>
+              ← Back
+            </button>
+          )}
+
           <img
             src={chat.user?.avatar || 'https://placehold.co/40'}
             className="chat-header-avatar"

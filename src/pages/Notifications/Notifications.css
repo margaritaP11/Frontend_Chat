@@ -4,6 +4,7 @@
   padding: 20px 40px;
   gap: 20px;
   max-width: 600px;
+  margin-left: 20px;
 }
 
 .notif-title {
@@ -63,6 +64,7 @@
   object-fit: cover;
   cursor: pointer;
 }
+
 .notif-delete {
   background: none;
   border: none;
@@ -74,4 +76,64 @@
 
 .notif-delete:hover {
   color: #000;
+}
+
+@media (max-width: 1024px) {
+  .notif-container {
+    margin-left: 200px;
+    padding: 20px 24px;
+    gap: 18px;
+  }
+
+  .notif-avatar,
+  .notif-post-thumb {
+    width: 44px;
+    height: 44px;
+  }
+
+  .notif-text {
+    font-size: 14px;
+  }
+
+  .notif-title {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 767px) {
+  .notif-container {
+    margin-left: 0;
+    padding: 16px 14px;
+    gap: 16px;
+  }
+
+  .notif-title {
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+
+  .notif-item {
+    padding: 10px 6px;
+    gap: 10px;
+  }
+
+  .notif-avatar,
+  .notif-post-thumb {
+    width: 40px;
+    height: 40px;
+  }
+
+  .notif-text {
+    font-size: 13px;
+    line-height: 1.25;
+  }
+
+  .notif-time {
+    font-size: 12px;
+  }
+
+  .notif-delete {
+    font-size: 16px;
+    padding: 2px;
+  }
 }

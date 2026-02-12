@@ -4,7 +4,7 @@ import { AuthContext } from '../../context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import './Login.css'
 import logo from '../../assets/ichcram.svg'
-import phoneImage from '../../assets/Hande.jpg' // ← добавь изображение телефона
+import phoneImage from '../../assets/Hande.jpg'
 
 export default function Login() {
   const { login, loading, error } = useContext(AuthContext)
@@ -17,8 +17,8 @@ export default function Login() {
     try {
       await login({ identifier, password })
       navigate('/')
-    } catch {
-      // ошибка уже в AuthContext
+    } catch (err) {
+      console.error(err)
     }
   }
 
@@ -28,7 +28,6 @@ export default function Login() {
         <img src={phoneImage} alt="Phone preview" />
       </div>
 
-      {/* Правая часть — форма */}
       <div className="auth-card">
         <div className="auth-box">
           <img src={logo} className="auth-logo" />
@@ -54,6 +53,7 @@ export default function Login() {
               {loading ? 'Logging in...' : 'Log in'}
             </button>
           </form>
+
           <div className="auth-divider">
             <div className="line"></div>
             <div className="or">OR</div>
@@ -65,9 +65,9 @@ export default function Login() {
           </Link>
         </div>
 
-        <div className=" secondary">
+        <div className="secondary">
           Don’t have an account?{' '}
-          <Link className=" secondary-link" to="/register">
+          <Link className="secondary-link" to="/register">
             Sign up
           </Link>
         </div>

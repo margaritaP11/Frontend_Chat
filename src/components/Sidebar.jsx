@@ -56,7 +56,7 @@ export default function Sidebar({ onOpenSearch }) {
 
   useEffect(() => {
     loadUnread()
-  }, [location.pathname]) // reload when user navigates
+  }, [location.pathname])
 
   return (
     <div className="sidebar">

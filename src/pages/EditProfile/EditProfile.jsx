@@ -22,7 +22,6 @@ export default function EditProfile() {
 
     const method = isNew ? 'POST' : 'PUT'
 
-    // 1️⃣ Обновляем текстовые данные
     const textRes = await fetch('http://localhost:8080/api/profile/me', {
       method,
       headers: {
@@ -34,7 +33,6 @@ export default function EditProfile() {
 
     let updatedUser = await textRes.json()
 
-    // 2️⃣ Обновляем аватар, если есть
     if (avatar) {
       const formData = new FormData()
       formData.append('avatar', avatar)

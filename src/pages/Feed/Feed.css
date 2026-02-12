@@ -1,27 +1,23 @@
-/* КОНТЕЙНЕР — 2 КОЛОНКИ ЯК У МАКЕТІ */
 .feed-container {
   display: grid;
   grid-template-columns: repeat(2, 404px);
   justify-content: center;
-  gap: 24px; /* у макеті трохи більше повітря */
+  gap: 24px;
   padding-top: 40px;
   padding-bottom: 60px;
 }
 
-/* КАРТКА ПОСТА */
 .feed-post {
-  width: 404px; /* чітко як у макеті */
+  width: 404px;
   background: #fff;
   border: 1px solid #dbdbdb;
   border-radius: 12px;
   overflow: hidden;
 }
 
-/* ХЕДЕР */
 .feed-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 14px 16px;
 }
 
@@ -29,6 +25,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  flex: 1;
 }
 
 .feed-avatar {
@@ -52,7 +49,6 @@
   color: #777;
 }
 
-/* КНОПКА FOLLOW */
 .follow-btn {
   background: none;
   border: none;
@@ -60,19 +56,23 @@
   font-weight: 600;
   cursor: pointer;
   font-size: 14px;
+
+  flex-shrink: 0;
+  width: auto;
+  white-space: nowrap;
+  padding: 4px 10px;
+  border-radius: 6px;
 }
 
 .follow-btn:hover {
   color: #b80d41;
 }
 
-/* ФОТО */
 .feed-image {
   width: 100%;
   height: auto;
 }
 
-/* ДІЇ */
 .feed-actions {
   display: flex;
   align-items: center;
@@ -103,7 +103,6 @@
   font-size: 15px;
 }
 
-/* ОПИС */
 .feed-caption {
   padding: 0 16px 12px;
   display: flex;
@@ -119,7 +118,6 @@
   font-weight: 500;
 }
 
-/* ПЕРШИЙ КОМЕНТ */
 .feed-comment {
   padding: 0 16px 6px;
   display: flex;
@@ -132,7 +130,6 @@
   cursor: pointer;
 }
 
-/* ПОКАЗАТИ ВСІ КОМЕНТИ */
 .feed-comments-link {
   padding: 0 16px 12px;
   font-size: 14px;
@@ -144,7 +141,6 @@
   color: #000;
 }
 
-/* ВСІ КОМЕНТИ */
 .all-comments {
   padding: 0 16px 12px;
   display: flex;
@@ -152,11 +148,121 @@
   gap: 6px;
 }
 
-/* КІНЕЦЬ СТРІЧКИ */
 .feed-end {
   text-align: center;
   color: #777;
   margin-top: 20px;
   padding-bottom: 40px;
   font-size: 14px;
+}
+
+@media (max-width: 1024px) {
+  .feed-container {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding-top: 30px;
+    padding-bottom: 50px;
+  }
+
+  .feed-post {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .feed-header {
+    padding: 12px 14px;
+  }
+
+  .feed-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .feed-actions {
+    padding: 10px 14px;
+  }
+
+  .feed-caption,
+  .feed-comment,
+  .feed-comments-link,
+  .all-comments {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .follow-btn {
+    font-size: 14px;
+    padding: 4px 10px;
+  }
+}
+
+@media (max-width: 767px) {
+  .feed-container {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 0 40px;
+  }
+
+  .feed-post {
+    width: 100%;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .feed-header {
+    padding: 10px 12px;
+  }
+
+  .feed-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .feed-username {
+    font-size: 14px;
+  }
+
+  .feed-date {
+    font-size: 11px;
+  }
+
+  .follow-btn {
+    font-size: 13px;
+    padding: 3px 8px;
+  }
+
+  .feed-actions {
+    padding: 10px 12px;
+    gap: 12px;
+  }
+
+  .like-icon,
+  .comment-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .likes-count {
+    font-size: 14px;
+  }
+
+  .feed-caption,
+  .feed-comment,
+  .feed-comments-link,
+  .all-comments {
+    padding-left: 12px;
+    padding-right: 12px;
+    font-size: 13px;
+  }
+
+  .comment-user {
+    font-size: 13px;
+  }
+
+  .feed-end {
+    font-size: 13px;
+    padding-bottom: 30px;
+  }
 }

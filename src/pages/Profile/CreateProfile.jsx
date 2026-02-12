@@ -2,7 +2,6 @@ import { useState, useContext } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import Sidebar from '../../components/Sidebar'
 import { useNavigate } from 'react-router-dom'
-import './CreateProfile.css'
 
 export default function CreateProfile() {
   const { setUser } = useContext(AuthContext)
@@ -18,7 +17,6 @@ export default function CreateProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    // 1️⃣ Создаём профиль (текстовые данные)
     const textRes = await fetch('http://localhost:8080/api/profile/me', {
       method: 'POST',
       headers: {
@@ -30,7 +28,6 @@ export default function CreateProfile() {
 
     let createdUser = await textRes.json()
 
-    // 2️⃣ Загружаем аватар, если есть
     if (avatar) {
       const formData = new FormData()
       formData.append('avatar', avatar)

@@ -35,7 +35,6 @@ body {
   z-index: 2;
 }
 
-/* Планшети + телефони (1024px і нижче) */
 @media (max-width: 1024px) {
   .sidebar {
     display: none !important;
@@ -51,11 +50,10 @@ body {
 
   .content-wrapper {
     margin-left: 0 !important;
-    padding: 70px 12px 80px; /* місце під topbar + footer */
+    padding: 70px 12px 80px;
   }
 }
 
-/* Телефони (767px і нижче) */
 @media (max-width: 767px) {
   .content-wrapper {
     padding: 70px 12px 80px;
