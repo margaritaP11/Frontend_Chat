@@ -33,3 +33,64 @@
   font-size: 16px;
   color: #666;
 }
+
+@media (max-width: 1024px) {
+  .nf-wrapper {
+    padding: 20px;
+  }
+
+  .nf-title {
+    font-size: 28px;
+  }
+
+  .nf-text {
+    font-size: 15px;
+  }
+
+  .nf-image {
+    width: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nf-wrapper {
+    flex-direction: column;
+    text-align: center;
+    height: auto;
+    padding: 20px;
+  }
+
+  .nf-left {
+    margin-bottom: 20px;
+  }
+
+  .nf-right {
+    padding-left: 0;
+  }
+
+  .nf-image {
+    width: 260px;
+  }
+
+  .nf-title {
+    font-size: 24px;
+  }
+
+  .nf-text {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nf-image {
+    width: 220px;
+  }
+
+  .nf-title {
+    font-size: 20px;
+  }
+
+  .nf-text {
+    font-size: 13px;
+  }
+}

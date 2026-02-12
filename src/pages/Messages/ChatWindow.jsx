@@ -24,23 +24,48 @@ export default function ChatWindow({ chat, user, socket, onBack }) {
     load()
   }, [chat])
 
+  useEffect(() => {
+    if (!socket || !chat) return
+
+    const handleReceive = (msg) => {
+      if (
+        (msg.sender === user._id && msg.receiver === chat.user._id) ||
+        (msg.sender === chat.user._id && msg.receiver === user._id)
+      ) {
+        setMessages((prev) => [...prev, msg])
+      }
+    }
+
+    socket.on('receive_message', handleReceive)
+
+    return () => {
+      socket.off('receive_message', handleReceive)
+    }
+  }, [socket, chat, user])
+
   const sendMessage = async () => {
     if (!text.trim()) return
 
-    const res = await fetch('http://localhost:8080/api/messages', {
+    const receiverId = chat.user._id
+
+    await fetch('http://localhost:8080/api/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
       body: JSON.stringify({
-        receiver: chat._id,
+        receiver: receiverId,
         text,
       }),
     })
 
-    const msg = await res.json()
-    setMessages((prev) => [...prev, msg])
+    socket.emit('send_message', {
+      sender: user._id,
+      receiver: receiverId,
+      text,
+    })
+
     setText('')
   }
 
@@ -79,9 +104,9 @@ export default function ChatWindow({ chat, user, socket, onBack }) {
       </div>
 
       <div className="chat-messages">
-        {messages.map((m) => (
+        {messages.map((m, index) => (
           <div
-            key={m._id}
+            key={m._id || index}
             className={`chat-bubble ${m.sender === user._id ? 'me' : 'them'}`}
           >
             {m.text}
