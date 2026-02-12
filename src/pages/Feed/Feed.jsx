@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { BACKEND_URL } from '../../config'
 import './Feed.css'
 
 import likeIcon from '../../assets/Like.svg'
@@ -27,7 +28,7 @@ export default function Feed() {
   useEffect(() => {
     const loadFeed = async () => {
       try {
-        const res = await fetch('http://localhost:8080/api/posts/feed', {
+        const res = await fetch(`${BACKEND_URL}/api/posts/feed`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -45,8 +46,8 @@ export default function Feed() {
 
   const toggleFollow = async (userId, isFollowing) => {
     const url = isFollowing
-      ? `http://localhost:8080/api/follow/unfollow/${userId}`
-      : `http://localhost:8080/api/follow/follow/${userId}`
+      ? `${BACKEND_URL}/api/follow/unfollow/${userId}`
+      : `${BACKEND_URL}/api/follow/follow/${userId}`
 
     await fetch(url, {
       method: isFollowing ? 'DELETE' : 'POST',
@@ -64,7 +65,7 @@ export default function Feed() {
 
   const toggleLike = async (postId) => {
     try {
-      await fetch(`http://localhost:8080/api/likes/${postId}`, {
+      await fetch(`${BACKEND_URL}/api/likes/${postId}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -118,7 +119,11 @@ export default function Feed() {
                 style={{ cursor: 'pointer' }}
               >
                 <img
-                  src={post.user?.avatar || 'https://placehold.co/40'}
+                  src={
+                    post.user?.avatar?.startsWith('http')
+                      ? post.user.avatar
+                      : `${BACKEND_URL}/${post.user.avatar}`
+                  }
                   className="feed-avatar"
                 />
                 <div className="feed-user-info">
@@ -137,8 +142,11 @@ export default function Feed() {
               </button>
             </div>
 
-            {/* IMAGE */}
-            <img src={post.image} className="feed-image" />
+            {/* IMAGE — FIXED */}
+            <img
+              src={post.image} // ←←← ВИПРАВЛЕНО
+              className="feed-image"
+            />
 
             {/* ACTIONS */}
             <div className="feed-actions">

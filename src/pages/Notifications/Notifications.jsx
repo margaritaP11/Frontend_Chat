@@ -1,10 +1,11 @@
 import { useEffect, useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext'
+import { BACKEND_URL } from '../../config'
 import { io } from 'socket.io-client'
 import './Notifications.css'
 
-const socket = io('http://localhost:8080')
+const socket = io(BACKEND_URL)
 
 export default function Notifications() {
   const [items, setItems] = useState([])
@@ -21,19 +22,14 @@ export default function Notifications() {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await fetch(
-          'http://localhost:8080/api/users/notifications',
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
+        const res = await fetch(`${BACKEND_URL}/api/users/notifications`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
-        )
+        })
 
         const data = await res.json()
         setItems(data)
-
-        // Фіксуємо час один раз — React дозволяє це в useEffect
         setNow(Date.now())
 
         socket.emit('mark_notifications_read', user._id)
@@ -47,7 +43,7 @@ export default function Notifications() {
 
   const deleteNotification = async (id) => {
     try {
-      await fetch(`http://localhost:8080/api/users/notifications/${id}`, {
+      await fetch(`${BACKEND_URL}/api/users/notifications/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       })
@@ -82,7 +78,11 @@ export default function Notifications() {
         return (
           <div key={n._id} className="notif-item">
             <img
-              src={n.fromUser.avatar}
+              src={
+                n.fromUser.avatar?.startsWith('http')
+                  ? n.fromUser.avatar
+                  : `${BACKEND_URL}/${n.fromUser.avatar}`
+              }
               className="notif-avatar"
               onClick={() => navigate(`/profile/${n.fromUser._id}`)}
             />

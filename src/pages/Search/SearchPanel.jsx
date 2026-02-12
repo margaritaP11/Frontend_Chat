@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { BACKEND_URL } from '../../config'
 import './Search.css'
 
 export default function SearchPanel({ onClose }) {
@@ -16,7 +17,7 @@ export default function SearchPanel({ onClose }) {
     const timeout = setTimeout(async () => {
       try {
         const res = await fetch(
-          `http://localhost:8080/api/search/users?q=${query}`,
+          `${BACKEND_URL}/api/search/users?q=${encodeURIComponent(query)}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -25,7 +26,6 @@ export default function SearchPanel({ onClose }) {
         )
 
         const data = await res.json()
-
         Promise.resolve().then(() => setResults(data))
       } catch (err) {
         console.error('SEARCH ERROR:', err)
@@ -61,9 +61,16 @@ export default function SearchPanel({ onClose }) {
               }}
             >
               <img
-                src={u.avatar || 'https://placehold.co/40'}
+                src={
+                  u.avatar
+                    ? u.avatar.startsWith('http')
+                      ? u.avatar
+                      : `${BACKEND_URL}/${u.avatar}`
+                    : 'https://placehold.co/40'
+                }
                 className="search-avatar"
               />
+
               <div>
                 <div className="search-username">{u.username}</div>
                 <div className="search-name">{u.fullName}</div>

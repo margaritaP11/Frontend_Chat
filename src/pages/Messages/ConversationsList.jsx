@@ -1,4 +1,5 @@
 import './ConversationsList.css'
+import { BACKEND_URL } from '../../config'
 
 export default function ConversationsList({
   conversations,
@@ -18,7 +19,13 @@ export default function ConversationsList({
           >
             <div className="conv-main" onClick={() => setActiveChat(c)}>
               <img
-                src={c.user?.avatar || 'https://placehold.co/40'}
+                src={
+                  c.user?.avatar
+                    ? c.user.avatar.startsWith('http')
+                      ? c.user.avatar
+                      : `${BACKEND_URL}/${c.user.avatar}`
+                    : 'https://placehold.co/40'
+                }
                 className="conv-avatar"
               />
 

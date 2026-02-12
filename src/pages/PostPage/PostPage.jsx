@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext'
 import Sidebar from '../../components/Sidebar'
 import PostModal from '../UserProfile/PostModal'
+import { BACKEND_URL } from '../../config'
 
 export default function PostPage() {
   const { id } = useParams()
@@ -16,9 +17,10 @@ export default function PostPage() {
   // ⭐ LOAD POST
   useEffect(() => {
     const loadPost = async () => {
-      const res = await fetch(`http://localhost:8080/api/posts/${id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/posts/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       })
+
       const data = await res.json()
 
       setPost({
@@ -27,19 +29,21 @@ export default function PostPage() {
           ? data.likes.includes(user._id)
           : false,
         likesCount: Array.isArray(data.likes) ? data.likes.length : 0,
+        image: data.image, // ⭐ ВАЖЛИВО: НЕ ЧІПАЄМО BASE64
       })
     }
+
     loadPost()
   }, [id, user])
 
   // ⭐ LOAD COMMENTS
   useEffect(() => {
     const loadComments = async () => {
-      const res = await fetch(`http://localhost:8080/api/comments/${id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/comments/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       })
-      const data = await res.json()
 
+      const data = await res.json()
       const safe = Array.isArray(data) ? data : []
 
       setComments(
@@ -47,7 +51,11 @@ export default function PostPage() {
           id: c._id,
           author: c.user?.username || 'user',
           text: c.text,
-          avatar: c.user?.avatar || 'https://placehold.co/32',
+          avatar: c.user?.avatar
+            ? c.user.avatar.startsWith('http')
+              ? c.user.avatar
+              : `${BACKEND_URL}/${c.user.avatar}`
+            : 'https://placehold.co/32',
           likes: Array.isArray(c.likes) ? c.likes.length : 0,
           liked: Array.isArray(c.likes) ? c.likes.includes(user._id) : false,
           createdAt: c.createdAt,
@@ -60,7 +68,7 @@ export default function PostPage() {
 
   // ⭐ LIKE POST
   const handleLikeToggle = async () => {
-    const res = await fetch(`http://localhost:8080/api/likes/${id}`, {
+    const res = await fetch(`${BACKEND_URL}/api/likes/${id}`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     })
@@ -76,13 +84,10 @@ export default function PostPage() {
 
   // ⭐ LIKE COMMENT
   const handleCommentLike = async (commentId) => {
-    const res = await fetch(
-      `http://localhost:8080/api/comments/like/${commentId}`,
-      {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      },
-    )
+    const res = await fetch(`${BACKEND_URL}/api/comments/like/${commentId}`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    })
 
     const data = await res.json()
 
@@ -98,7 +103,7 @@ export default function PostPage() {
     const text = newComment.trim()
     if (!text) return
 
-    const res = await fetch(`http://localhost:8080/api/comments/${post._id}`, {
+    const res = await fetch(`${BACKEND_URL}/api/comments/${post._id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -113,7 +118,11 @@ export default function PostPage() {
       id: c._id,
       author: c.user?.username || user.username,
       text: c.text,
-      avatar: c.user?.avatar || user.avatar,
+      avatar: c.user?.avatar
+        ? c.user.avatar.startsWith('http')
+          ? c.user.avatar
+          : `${BACKEND_URL}/${c.user.avatar}`
+        : user.avatar,
       liked: false,
       likes: 0,
       createdAt: c.createdAt,

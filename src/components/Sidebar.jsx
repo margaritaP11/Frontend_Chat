@@ -13,6 +13,7 @@ import {
   FiLogOut,
 } from 'react-icons/fi'
 
+import { BACKEND_URL } from '../config'
 import './Sidebar.css'
 
 export default function Sidebar({ onOpenSearch }) {
@@ -35,14 +36,11 @@ export default function Sidebar({ onOpenSearch }) {
   // Load unread counters
   const loadUnread = async () => {
     try {
-      const res = await fetch(
-        'http://localhost:8080/api/messages/unread-counts',
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
+      const res = await fetch(`${BACKEND_URL}/api/messages/unread-counts`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-      )
+      })
 
       const data = await res.json()
       setUnread({
@@ -131,10 +129,17 @@ export default function Sidebar({ onOpenSearch }) {
           onClick={() => navigate('/profile/me')}
         >
           <img
-            src={user?.avatar || 'https://placehold.co/40'}
+            src={
+              user?.avatar
+                ? user.avatar.startsWith('http')
+                  ? user.avatar
+                  : `${BACKEND_URL}/${user.avatar}`
+                : 'https://placehold.co/40'
+            }
             className="sidebar-avatar"
             alt="avatar"
           />
+
           <span>Profile</span>
         </div>
       </nav>

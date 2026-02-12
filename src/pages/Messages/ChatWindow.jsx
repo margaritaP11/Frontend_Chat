@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { BACKEND_URL } from '../../config'
 import './ChatWindow.css'
 
 export default function ChatWindow({ chat, user, socket, onBack }) {
@@ -7,16 +8,15 @@ export default function ChatWindow({ chat, user, socket, onBack }) {
 
   const isMobile = window.innerWidth <= 767
 
+  // ---------------------- LOAD MESSAGES ----------------------
   useEffect(() => {
-    if (!chat) return
+    if (!chat || !chat.user?._id) return
 
     const load = async () => {
-      const res = await fetch(
-        `http://localhost:8080/api/messages/${chat._id}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        },
-      )
+      const res = await fetch(`${BACKEND_URL}/api/messages/${chat.user._id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      })
+
       const data = await res.json()
       setMessages(Array.isArray(data) ? data : [])
     }
@@ -24,14 +24,16 @@ export default function ChatWindow({ chat, user, socket, onBack }) {
     load()
   }, [chat])
 
+  // ---------------------- SOCKET RECEIVE ----------------------
   useEffect(() => {
-    if (!socket || !chat) return
+    if (!socket || !chat?.user?._id) return
 
     const handleReceive = (msg) => {
-      if (
+      const isBetweenUsers =
         (msg.sender === user._id && msg.receiver === chat.user._id) ||
         (msg.sender === chat.user._id && msg.receiver === user._id)
-      ) {
+
+      if (isBetweenUsers) {
         setMessages((prev) => [...prev, msg])
       }
     }
@@ -43,12 +45,18 @@ export default function ChatWindow({ chat, user, socket, onBack }) {
     }
   }, [socket, chat, user])
 
+  // ---------------------- SEND MESSAGE ----------------------
   const sendMessage = async () => {
     if (!text.trim()) return
 
-    const receiverId = chat.user._id
+    const receiverId = chat?.user?._id
 
-    await fetch('http://localhost:8080/api/messages', {
+    if (!receiverId) {
+      console.error('❌ ERROR: receiverId is undefined', chat)
+      return
+    }
+
+    const res = await fetch(`${BACKEND_URL}/api/messages`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -59,6 +67,11 @@ export default function ChatWindow({ chat, user, socket, onBack }) {
         text,
       }),
     })
+
+    if (!res.ok) {
+      console.error('SEND MESSAGE ERROR:', await res.text())
+      return
+    }
 
     socket.emit('send_message', {
       sender: user._id,
@@ -76,7 +89,9 @@ export default function ChatWindow({ chat, user, socket, onBack }) {
     }
   }
 
-  if (!chat) return <div className="chat-empty">Select a conversation</div>
+  if (!chat || !chat.user) {
+    return <div className="chat-empty">Select a conversation</div>
+  }
 
   return (
     <div className="chat-window">
@@ -89,9 +104,14 @@ export default function ChatWindow({ chat, user, socket, onBack }) {
           )}
 
           <img
-            src={chat.user?.avatar || 'https://placehold.co/40'}
+            src={
+              chat.user?.avatar?.startsWith('http')
+                ? chat.user.avatar
+                : `${BACKEND_URL}/${chat.user.avatar}`
+            }
             className="chat-header-avatar"
           />
+
           <div>
             <div className="chat-header-name">{chat.user?.username}</div>
             <div className="chat-header-sub">

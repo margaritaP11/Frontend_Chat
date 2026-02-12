@@ -1,4 +1,5 @@
 import './ProfileHeader.css'
+import { BACKEND_URL } from '../../config'
 
 export default function ProfileHeader({
   user,
@@ -7,10 +8,16 @@ export default function ProfileHeader({
   followingCount,
   isOwner,
 }) {
+  const avatarSrc = user.avatar
+    ? user.avatar.startsWith('http')
+      ? user.avatar
+      : `${BACKEND_URL}/${user.avatar}`
+    : 'https://placehold.co/120'
+
   return (
     <div className="profile-header">
       <img
-        src={user.avatar || 'https://placehold.co/120'}
+        src={avatarSrc}
         className="profile-avatar"
       />
 

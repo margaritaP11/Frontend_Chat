@@ -6,8 +6,10 @@ import ConversationsList from './ConversationsList'
 import ChatWindow from './ChatWindow'
 import './MessagesLayout.css'
 import { io } from 'socket.io-client'
+import { BACKEND_URL } from '../../config'
 
-const socket = io('http://localhost:8080')
+// SOCKET через BACKEND_URL
+const socket = io(BACKEND_URL)
 
 export default function MessagesPage() {
   const { user } = useContext(AuthContext)
@@ -16,25 +18,37 @@ export default function MessagesPage() {
   const [conversations, setConversations] = useState([])
   const [activeChat, setActiveChat] = useState(null)
 
+  // ---------------------- JOIN SOCKET ----------------------
   useEffect(() => {
     if (user) {
       socket.emit('join', user._id)
     }
   }, [user])
 
+  // ---------------------- LOAD CONVERSATIONS ----------------------
   useEffect(() => {
     if (!user) return
 
     const load = async () => {
       try {
-        const res = await fetch('http://localhost:8080/api/messages', {
+        const res = await fetch(`${BACKEND_URL}/api/messages`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         })
 
         const data = await res.json()
-        setConversations(Array.isArray(data) ? data : [])
+
+        // ⭐ Додаємо user._id вручну
+        const fixed = data.map((d) => ({
+          ...d,
+          user: {
+            ...d.user,
+            _id: d._id, // ←←← ВАЖЛИВО
+          },
+        }))
+
+        setConversations(fixed)
       } catch (err) {
         console.log('Ошибка загрузки диалогов:', err)
       }
@@ -43,9 +57,10 @@ export default function MessagesPage() {
     load()
   }, [user])
 
+  // ---------------------- DELETE DIALOG ----------------------
   const deleteDialog = async (dialogId) => {
     try {
-      await fetch(`http://localhost:8080/api/messages/dialog/${dialogId}`, {
+      await fetch(`${BACKEND_URL}/api/messages/dialog/${dialogId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -62,6 +77,7 @@ export default function MessagesPage() {
     }
   }
 
+  // ---------------------- OPEN CHAT ----------------------
   useEffect(() => {
     if (!user) return
 
@@ -72,7 +88,7 @@ export default function MessagesPage() {
         if (existing) {
           setActiveChat(existing)
         } else {
-          const res = await fetch(`http://localhost:8080/api/profile/${userId}`)
+          const res = await fetch(`${BACKEND_URL}/api/profile/${userId}`)
           const profile = await res.json()
 
           setActiveChat({
@@ -80,6 +96,7 @@ export default function MessagesPage() {
             user: {
               username: profile.username,
               avatar: profile.avatar,
+              _id: userId, // ←←← ДОДАНО
             },
             lastMessage: '',
           })

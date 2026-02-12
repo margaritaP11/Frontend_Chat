@@ -1,23 +1,22 @@
 import { useState, useEffect } from 'react'
 import { AuthContext } from './AuthContext'
+import { BACKEND_URL } from '../config'
 
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // ---------------------- АВТО-ЛОГИН ----------------------
   useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      setLoading(false)
+      return
+    }
+
     const checkAuth = async () => {
-      const token = localStorage.getItem('token')
-
-      if (!token) {
-        setLoading(false)
-        return
-      }
-
       try {
-        const res = await fetch('http://localhost:8080/api/profile/me', {
+        const res = await fetch(`${BACKEND_URL}/api/profile/me`, {
           headers: { Authorization: `Bearer ${token}` },
         })
 
@@ -35,13 +34,12 @@ export default function AuthProvider({ children }) {
     checkAuth()
   }, [])
 
-  // ---------------------- ЛОГИН ----------------------
   const login = async ({ identifier, password }) => {
     setLoading(true)
     setError(null)
 
     try {
-      const res = await fetch('http://localhost:8080/api/auth/login', {
+      const res = await fetch(`${BACKEND_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ identifier, password }),
@@ -53,6 +51,7 @@ export default function AuthProvider({ children }) {
 
       localStorage.setItem('token', data.token)
       setUser(data.user)
+      return data
     } catch (err) {
       setError(err.message)
       throw err
@@ -61,13 +60,12 @@ export default function AuthProvider({ children }) {
     }
   }
 
-  // ---------------------- РЕГИСТРАЦИЯ ----------------------
   const register = async ({ username, fullName, email, password }) => {
     setLoading(true)
     setError(null)
 
     try {
-      const res = await fetch('http://localhost:8080/api/auth/register', {
+      const res = await fetch(`${BACKEND_URL}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, fullName, email, password }),
@@ -75,10 +73,14 @@ export default function AuthProvider({ children }) {
 
       const data = await res.json()
 
+      console.log('REGISTER RESPONSE:', data) // ← ОТУТ ДОДАТИ
+
       if (!res.ok) throw new Error(data.message)
 
       localStorage.setItem('token', data.token)
       setUser(data.user)
+
+      return data
     } catch (err) {
       setError(err.message)
       throw err
@@ -87,7 +89,6 @@ export default function AuthProvider({ children }) {
     }
   }
 
-  // ---------------------- ВЫХОД ----------------------
   const logout = () => {
     localStorage.removeItem('token')
     setUser(null)

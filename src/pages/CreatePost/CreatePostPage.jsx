@@ -1,6 +1,8 @@
 import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext'
+import { BACKEND_URL } from '../../config'
+
 import uploadIcon from '../../assets/Download1.svg'
 import emojiIcon from '../../assets/emoji.svg'
 import './CreatePostPage.css'
@@ -15,17 +17,18 @@ export default function CreatePostPage() {
 
   const onClose = () => navigate(-1)
 
+  // ---------------------- АВАТАР ----------------------
   let avatarSrc = 'https://placehold.co/40'
   const rawAvatar = user?.avatar?.url || user?.avatar
 
   if (rawAvatar) {
     if (rawAvatar.startsWith('data:image')) avatarSrc = rawAvatar
     else if (rawAvatar.startsWith('http')) avatarSrc = rawAvatar
-    else if (rawAvatar.startsWith('/'))
-      avatarSrc = `http://localhost:8080${rawAvatar}`
-    else avatarSrc = `http://localhost:8080/${rawAvatar}`
+    else if (rawAvatar.startsWith('/')) avatarSrc = `${BACKEND_URL}${rawAvatar}`
+    else avatarSrc = `${BACKEND_URL}/${rawAvatar}`
   }
 
+  // ---------------------- СОЗДАНИЕ ПОСТА ----------------------
   const handleSubmit = async () => {
     if (!imageFile) return
     setLoading(true)
@@ -35,7 +38,7 @@ export default function CreatePostPage() {
     formData.append('text', caption)
 
     try {
-      const res = await fetch('http://localhost:8080/api/posts', {
+      const res = await fetch(`${BACKEND_URL}/api/posts`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -47,7 +50,7 @@ export default function CreatePostPage() {
       console.log('POST CREATED:', data)
 
       setLoading(false)
-      onClose() // ← тепер працює
+      onClose()
     } catch (err) {
       console.error('POST CREATE ERROR:', err)
       setLoading(false)

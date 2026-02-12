@@ -2,6 +2,7 @@ import { useState } from 'react'
 import PostComments from './PostComments'
 import PostActions from './PostActions'
 import SmileIcon from '../../assets/emoji.svg'
+import { BACKEND_URL } from '../../config'
 import './PostModal.css'
 
 export default function PostModal({
@@ -26,6 +27,16 @@ export default function PostModal({
   const [isEditing, setIsEditing] = useState(false)
   const [editText, setEditText] = useState(post.text)
 
+  // ---------------------- АВАТАР ----------------------
+  const avatarSrc = user.avatar
+    ? user.avatar.startsWith('http')
+      ? user.avatar
+      : `${BACKEND_URL}/${user.avatar}`
+    : 'https://placehold.co/40'
+
+  // ---------------------- ИЗОБРАЖЕНИЕ ПОСТА ----------------------
+  const postImageSrc = post.image
+
   return (
     <div className="modal-wrapper" onClick={onClose}>
       <div className="modal-layout" onClick={(e) => e.stopPropagation()}>
@@ -33,18 +44,14 @@ export default function PostModal({
 
         {/* LEFT SIDE */}
         <div className="modal-left">
-          <img src={post.image} alt="post" className="modal-image" />
+          <img src={postImageSrc} alt="post" className="modal-image" />
         </div>
 
         {/* RIGHT SIDE */}
         <div className="modal-right">
           {/* HEADER */}
           <div className="modal-header">
-            <img
-              src={user.avatar || 'https://placehold.co/40'}
-              alt="avatar"
-              className="modal-avatar"
-            />
+            <img src={avatarSrc} alt="avatar" className="modal-avatar" />
 
             <span className="modal-username">{user.username}</span>
 
@@ -93,11 +100,7 @@ export default function PostModal({
 
           {/* POST HEADER */}
           <div className="post-header">
-            <img
-              src={user.avatar || 'https://placehold.co/32'}
-              alt="avatar"
-              className="post-author-avatar"
-            />
+            <img src={avatarSrc} alt="avatar" className="post-author-avatar" />
 
             <div className="post-author-block">
               <span className="post-author-name">{user.username}</span>

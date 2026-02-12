@@ -2,6 +2,7 @@ import { useContext, useState } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import Sidebar from '../../components/Sidebar'
 import { useNavigate } from 'react-router-dom'
+import { BACKEND_URL } from '../../config'
 import './EditProfile.css'
 
 export default function EditProfile() {
@@ -17,12 +18,25 @@ export default function EditProfile() {
   const [avatar, setAvatar] = useState(null)
   const [preview, setPreview] = useState(null)
 
+  // ---------------------- АВАТАР ----------------------
+  let avatarSrc = 'https://placehold.co/150'
+  const rawAvatar = user?.avatar?.url || user?.avatar
+
+  if (rawAvatar) {
+    if (rawAvatar.startsWith('data:image')) avatarSrc = rawAvatar
+    else if (rawAvatar.startsWith('http')) avatarSrc = rawAvatar
+    else if (rawAvatar.startsWith('/')) avatarSrc = `${BACKEND_URL}${rawAvatar}`
+    else avatarSrc = `${BACKEND_URL}/${rawAvatar}`
+  }
+
+  // ---------------------- SUBMIT ----------------------
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     const method = isNew ? 'POST' : 'PUT'
 
-    const textRes = await fetch('http://localhost:8080/api/profile/me', {
+    // --- TEXT UPDATE ---
+    const textRes = await fetch(`${BACKEND_URL}/api/profile/me`, {
       method,
       headers: {
         'Content-Type': 'application/json',
@@ -33,20 +47,18 @@ export default function EditProfile() {
 
     let updatedUser = await textRes.json()
 
+    // --- AVATAR UPDATE ---
     if (avatar) {
       const formData = new FormData()
       formData.append('avatar', avatar)
 
-      const avatarRes = await fetch(
-        'http://localhost:8080/api/profile/avatar',
-        {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-          body: formData,
+      const avatarRes = await fetch(`${BACKEND_URL}/api/profile/avatar`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-      )
+        body: formData,
+      })
 
       updatedUser = await avatarRes.json()
     }
@@ -66,7 +78,7 @@ export default function EditProfile() {
 
         <div className="edit-header">
           <img
-            src={preview || user?.avatar || 'https://placehold.co/150'}
+            src={preview || avatarSrc}
             alt="avatar"
             className="edit-avatar"
           />

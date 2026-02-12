@@ -2,6 +2,7 @@ import { useState, useContext } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import Sidebar from '../../components/Sidebar'
 import { useNavigate } from 'react-router-dom'
+import { BACKEND_URL } from '../../config'
 
 export default function CreateProfile() {
   const { setUser } = useContext(AuthContext)
@@ -17,7 +18,8 @@ export default function CreateProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const textRes = await fetch('http://localhost:8080/api/profile/me', {
+    // --- CREATE PROFILE TEXT ---
+    const textRes = await fetch(`${BACKEND_URL}/api/profile/me`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -28,20 +30,18 @@ export default function CreateProfile() {
 
     let createdUser = await textRes.json()
 
+    // --- UPLOAD AVATAR ---
     if (avatar) {
       const formData = new FormData()
       formData.append('avatar', avatar)
 
-      const avatarRes = await fetch(
-        'http://localhost:8080/api/profile/avatar',
-        {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-          body: formData,
+      const avatarRes = await fetch(`${BACKEND_URL}/api/profile/avatar`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-      )
+        body: formData,
+      })
 
       createdUser = await avatarRes.json()
     }

@@ -1,9 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom'
-
 import { useEffect, useState, useContext } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import PostModal from '../UserProfile/PostModal'
 import './OtherProfile.css'
+import { BACKEND_URL } from '../../config'
 
 export default function OtherProfilePage() {
   const { id } = useParams()
@@ -18,15 +18,16 @@ export default function OtherProfilePage() {
   const [comments, setComments] = useState([])
   const [newComment, setNewComment] = useState('')
 
+  // ---------------------- LOAD PROFILE + POSTS + FOLLOW ----------------------
   useEffect(() => {
     const fetchProfile = async () => {
-      const res = await fetch(`http://localhost:8080/api/profile/${id}`)
+      const res = await fetch(`${BACKEND_URL}/api/profile/${id}`)
       const data = await res.json()
       setProfile(data)
     }
 
     const fetchPosts = async () => {
-      const res = await fetch(`http://localhost:8080/api/posts/user/${id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/posts/user/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -44,7 +45,7 @@ export default function OtherProfilePage() {
     }
 
     const checkFollow = async () => {
-      const res = await fetch(`http://localhost:8080/api/follow/check/${id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/follow/check/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -58,11 +59,11 @@ export default function OtherProfilePage() {
     checkFollow()
   }, [id])
 
-  // FOLLOW / UNFOLLOW
+  // ---------------------- FOLLOW / UNFOLLOW ----------------------
   const handleFollow = async () => {
     const url = isFollowing
-      ? `http://localhost:8080/api/follow/unfollow/${id}`
-      : `http://localhost:8080/api/follow/follow/${id}`
+      ? `${BACKEND_URL}/api/follow/unfollow/${id}`
+      : `${BACKEND_URL}/api/follow/follow/${id}`
 
     await fetch(url, {
       method: isFollowing ? 'DELETE' : 'POST',
@@ -81,19 +82,16 @@ export default function OtherProfilePage() {
     }))
   }
 
-  // OPEN POST MODAL
+  // ---------------------- OPEN POST MODAL ----------------------
   const openPostModal = async (post) => {
     setSelectedPost(post)
 
     try {
-      const res = await fetch(
-        `http://localhost:8080/api/comments/${post._id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
+      const res = await fetch(`${BACKEND_URL}/api/comments/${post._id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-      )
+      })
 
       const data = await res.json()
 
@@ -103,7 +101,11 @@ export default function OtherProfilePage() {
               id: c._id,
               author: c.user?.username || 'user',
               text: c.text,
-              avatar: c.user?.avatar || 'https://placehold.co/32',
+              avatar: c.user?.avatar
+                ? c.user.avatar.startsWith('http')
+                  ? c.user.avatar
+                  : `${BACKEND_URL}/${c.user.avatar}`
+                : 'https://placehold.co/32',
               likes: Array.isArray(c.likes) ? c.likes.length : 0,
               liked: Array.isArray(c.likes)
                 ? c.likes.includes(currentUser._id)
@@ -126,19 +128,16 @@ export default function OtherProfilePage() {
     setNewComment('')
   }
 
-  // LIKE POST
+  // ---------------------- LIKE POST ----------------------
   const handleLikeToggle = async () => {
     if (!selectedPost) return
 
-    const res = await fetch(
-      `http://localhost:8080/api/likes/${selectedPost._id}`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
+    const res = await fetch(`${BACKEND_URL}/api/likes/${selectedPost._id}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
-    )
+    })
 
     const data = await res.json()
 
@@ -157,10 +156,10 @@ export default function OtherProfilePage() {
     )
   }
 
-  // COMMENT LIKE
+  // ---------------------- LIKE COMMENT ----------------------
   const handleCommentLike = async (id) => {
     try {
-      const res = await fetch(`http://localhost:8080/api/comments/like/${id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/comments/like/${id}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -179,10 +178,10 @@ export default function OtherProfilePage() {
     }
   }
 
-  // DELETE COMMENT
+  // ---------------------- DELETE COMMENT ----------------------
   const deleteComment = async (id) => {
     try {
-      await fetch(`http://localhost:8080/api/comments/${id}`, {
+      await fetch(`${BACKEND_URL}/api/comments/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -195,14 +194,14 @@ export default function OtherProfilePage() {
     }
   }
 
-  // ADD COMMENT
+  // ---------------------- ADD COMMENT ----------------------
   const handleAddComment = async () => {
     const text = newComment.trim()
     if (!text || !selectedPost) return
 
     try {
       const res = await fetch(
-        `http://localhost:8080/api/comments/${selectedPost._id}`,
+        `${BACKEND_URL}/api/comments/${selectedPost._id}`,
         {
           method: 'POST',
           headers: {
@@ -219,7 +218,11 @@ export default function OtherProfilePage() {
         id: c._id,
         author: c.user?.username || currentUser.username,
         text: c.text,
-        avatar: c.user?.avatar || currentUser.avatar,
+        avatar: c.user?.avatar
+          ? c.user.avatar.startsWith('http')
+            ? c.user.avatar
+            : `${BACKEND_URL}/${c.user.avatar}`
+          : currentUser.avatar,
         liked: false,
         likes: Array.isArray(c.likes) ? c.likes.length : 0,
         createdAt: c.createdAt,
@@ -245,7 +248,13 @@ export default function OtherProfilePage() {
     <div className="other-profile">
       <div className="profile-header">
         <img
-          src={profile.avatar || 'https://placehold.co/120'}
+          src={
+            profile.avatar
+              ? profile.avatar.startsWith('http')
+                ? profile.avatar
+                : `${BACKEND_URL}/${profile.avatar}`
+              : 'https://placehold.co/120'
+          }
           className="profile-avatar"
         />
 

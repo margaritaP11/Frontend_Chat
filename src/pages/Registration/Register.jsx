@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react'
 import { AuthContext } from '../../context/AuthContext'
-
 import { Link, useNavigate } from 'react-router-dom'
 import './Register.css'
 import logo from '../../assets/ichcram.svg'
@@ -16,11 +15,18 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
     try {
-      await signup({ email, fullName, username, password })
-      navigate('/edit')
+      const data = await signup({ email, fullName, username, password })
+
+      if (data?.token) {
+        localStorage.setItem('token', data.token)
+      }
+
+      // 🔥 ПРАВИЛЬНИЙ ШЛЯХ
+      navigate('/profile/edit')
     } catch (err) {
-      console.error(err)
+      console.error('REGISTER ERROR:', err)
     }
   }
 
@@ -42,6 +48,7 @@ export default function Register() {
             <input
               type="email"
               placeholder="Email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -53,6 +60,7 @@ export default function Register() {
           <input
             type="text"
             placeholder="Full Name"
+            autoComplete="name"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
           />
@@ -61,6 +69,7 @@ export default function Register() {
             <input
               type="text"
               placeholder="Username"
+              autoComplete="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
@@ -73,6 +82,7 @@ export default function Register() {
             <input
               type="password"
               placeholder="Password"
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -80,19 +90,6 @@ export default function Register() {
               <div className="field-error">Password is too weak.</div>
             )}
           </div>
-
-          <p className="register-note">
-            People who use our service may have uploaded your contact
-            information to Instagram.{' '}
-            <span className="link-like">Learn More</span>
-          </p>
-
-          <p className="register-note small">
-            By signing up, you agree to our{' '}
-            <span className="link-like">Terms</span>,{' '}
-            <span className="link-like">Privacy Policy</span> and{' '}
-            <span className="link-like">Cookies Policy</span>.
-          </p>
 
           <button type="submit" disabled={loading}>
             {loading ? 'Signing up...' : 'Sign up'}

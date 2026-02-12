@@ -8,6 +8,7 @@ import ProfileHeader from './ProfileHeader'
 import PostGrid from './PostGrid'
 import PostModal from './PostModal'
 
+import { BACKEND_URL } from '../../config'
 import './UserProfile.css'
 
 export default function UserProfile() {
@@ -25,18 +26,15 @@ export default function UserProfile() {
 
   const isCreateOpen = params.get('create') === 'true'
 
-  // LOAD POSTS
+  // ---------------------- LOAD POSTS ----------------------
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:8080/api/posts/user/${user._id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
+        const res = await fetch(`${BACKEND_URL}/api/posts/user/${user._id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
-        )
+        })
         const data = await res.json()
         setPosts(data)
       } catch (err) {
@@ -47,17 +45,15 @@ export default function UserProfile() {
     if (user?._id) fetchPosts()
   }, [user])
 
-  // LOAD FOLLOWERS & FOLLOWING
+  // ---------------------- LOAD FOLLOWERS & FOLLOWING ----------------------
   useEffect(() => {
     if (!user?._id) return
 
     const loadFollowers = async () => {
       const res = await fetch(
-        `http://localhost:8080/api/follow/followers/${user._id}`,
+        `${BACKEND_URL}/api/follow/followers/${user._id}`,
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         },
       )
       const data = await res.json()
@@ -66,11 +62,9 @@ export default function UserProfile() {
 
     const loadFollowing = async () => {
       const res = await fetch(
-        `http://localhost:8080/api/follow/following/${user._id}`,
+        `${BACKEND_URL}/api/follow/following/${user._id}`,
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         },
       )
       const data = await res.json()
@@ -81,31 +75,28 @@ export default function UserProfile() {
     loadFollowing()
   }, [user])
 
-  // OPEN POST MODAL — ВИПРАВЛЕНО
+  // ---------------------- OPEN POST MODAL ----------------------
   const openPostModal = async (post) => {
     setSelectedPost(post)
 
     try {
-      const res = await fetch(
-        `http://localhost:8080/api/comments/${post._id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        },
-      )
+      const res = await fetch(`${BACKEND_URL}/api/comments/${post._id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      })
 
       const data = await res.json()
-
-      // ГОЛОВНЕ ВИПРАВЛЕННЯ — comments завжди масив
       const safeComments = Array.isArray(data) ? data : []
 
       setComments(
         safeComments.map((c) => ({
           id: c._id,
-          author: c.user?.name || 'user',
+          author: c.user?.username || 'user',
           text: c.text,
-          avatar: c.user?.avatar || user.avatar || 'https://placehold.co/32',
+          avatar: c.user?.avatar
+            ? c.user.avatar.startsWith('http')
+              ? c.user.avatar
+              : `${BACKEND_URL}/${c.user.avatar}`
+            : user.avatar || 'https://placehold.co/32',
           likes: Array.isArray(c.likes) ? c.likes.length : 0,
           liked: Array.isArray(c.likes) ? c.likes.includes(user._id) : false,
           createdAt: c.createdAt,
@@ -113,33 +104,27 @@ export default function UserProfile() {
       )
     } catch (err) {
       console.error('FETCH COMMENTS ERROR:', err)
-      setComments([]) // fallback
+      setComments([])
     }
 
     setNewComment('')
   }
 
-  // CLOSE MODAL
   const closePostModal = () => {
     setSelectedPost(null)
     setComments([])
     setNewComment('')
   }
 
-  // LIKE POST
+  // ---------------------- LIKE POST ----------------------
   const handleLikeToggle = async () => {
     if (!selectedPost) return
 
     try {
-      const res = await fetch(
-        `http://localhost:8080/api/likes/${selectedPost._id}`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        },
-      )
+      const res = await fetch(`${BACKEND_URL}/api/likes/${selectedPost._id}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      })
 
       const data = await res.json()
 
@@ -161,14 +146,12 @@ export default function UserProfile() {
     }
   }
 
-  // DELETE POST
+  // ---------------------- DELETE POST ----------------------
   const handleDeletePost = async (postId) => {
     try {
-      await fetch(`http://localhost:8080/api/posts/${postId}`, {
+      await fetch(`${BACKEND_URL}/api/posts/${postId}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       })
 
       setPosts((prev) => prev.filter((p) => p._id !== postId))
@@ -178,10 +161,10 @@ export default function UserProfile() {
     }
   }
 
-  // SAVE EDIT
+  // ---------------------- SAVE EDIT ----------------------
   const handleSaveEdit = async (postId, newText) => {
     try {
-      const res = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+      const res = await fetch(`${BACKEND_URL}/api/posts/${postId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -207,14 +190,12 @@ export default function UserProfile() {
     }
   }
 
-  // COMMENT LIKE
+  // ---------------------- LIKE COMMENT ----------------------
   const handleCommentLike = async (id) => {
     try {
-      const res = await fetch(`http://localhost:8080/api/comments/like/${id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/comments/like/${id}`, {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       })
 
       const data = await res.json()
@@ -229,14 +210,12 @@ export default function UserProfile() {
     }
   }
 
-  // DELETE COMMENT
+  // ---------------------- DELETE COMMENT ----------------------
   const deleteComment = async (id) => {
     try {
-      await fetch(`http://localhost:8080/api/comments/${id}`, {
+      await fetch(`${BACKEND_URL}/api/comments/${id}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       })
 
       setComments((prev) => prev.filter((c) => c.id !== id))
@@ -245,14 +224,14 @@ export default function UserProfile() {
     }
   }
 
-  // ADD COMMENT
+  // ---------------------- ADD COMMENT ----------------------
   const handleAddComment = async () => {
     const text = newComment.trim()
     if (!text || !selectedPost) return
 
     try {
       const res = await fetch(
-        `http://localhost:8080/api/comments/${selectedPost._id}`,
+        `${BACKEND_URL}/api/comments/${selectedPost._id}`,
         {
           method: 'POST',
           headers: {
@@ -267,9 +246,13 @@ export default function UserProfile() {
 
       const newItem = {
         id: c._id,
-        author: c.user?.name || user.username,
+        author: c.user?.username || user.username,
         text: c.text,
-        avatar: c.user?.avatar || user.avatar || 'https://placehold.co/32',
+        avatar: c.user?.avatar
+          ? c.user.avatar.startsWith('http')
+            ? c.user.avatar
+            : `${BACKEND_URL}/${c.user.avatar}`
+          : user.avatar,
         liked: false,
         likes: Array.isArray(c.likes) ? c.likes.length : 0,
         createdAt: c.createdAt,
@@ -282,7 +265,7 @@ export default function UserProfile() {
     }
   }
 
-  // ENTER KEY
+  // ---------------------- ENTER KEY ----------------------
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault()
@@ -290,7 +273,7 @@ export default function UserProfile() {
     }
   }
 
-  // TIME AGO
+  // ---------------------- TIME AGO ----------------------
   const timeAgo = (dateString) => {
     if (!dateString) return ''
     const created = new Date(dateString)
